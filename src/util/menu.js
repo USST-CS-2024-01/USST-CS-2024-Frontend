@@ -6,7 +6,10 @@ import {
     ProfileOutlined,
     AuditOutlined,
     UsergroupAddOutlined,
-    IdcardOutlined
+    IdcardOutlined,
+    ReadOutlined,
+    FileTextOutlined,
+    FileSyncOutlined
 } from '@ant-design/icons';
 
 export const MANAGE_MENU = [
@@ -15,6 +18,41 @@ export const MANAGE_MENU = [
         label: '仪表盘',
         icon: <DashboardOutlined />,
         href: '/manage'
+    },
+    {
+        key: 'class',
+        label: '班级',
+        icon: <ReadOutlined />,
+        children: [
+            {
+                key: 'my_class',
+                label: '我的班级',
+                icon: <ReadOutlined />,
+                href: '/manage/class/my_class'
+            },
+            {
+                key: 'class_management',
+                label: '班级管理',
+                icon: <SettingOutlined />,
+                href: '/manage/class/list',
+                roles: ['admin'],
+                children: [
+                    {
+                        key: 'class_edit',
+                        label: '班级编辑',
+                        href: '/manage/class/edit/*',
+                        roles: ['admin'],
+                        hidden: true
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        key: 'file',
+        label: '我的文件',
+        icon: <FileTextOutlined />,
+        href: '/manage/file/my',
     },
     {
         key: 'user',

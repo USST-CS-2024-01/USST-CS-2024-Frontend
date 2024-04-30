@@ -1,12 +1,11 @@
 "use client"
 import { Breadcrumb, Button, Popconfirm, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-import { ProTable, TableDropdown } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
 import { useRouter } from 'next/navigation';
 import { user } from '@/api/index';
 import { PlusOutlined } from '@ant-design/icons';
-import { message } from 'antd';
 
 export default function UserList() {
     const [breadcrumb, setBreadcrumb] = useState([]);
