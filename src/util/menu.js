@@ -1,5 +1,13 @@
 "use client";
-import { DashboardOutlined, SettingOutlined, UserOutlined, ProfileOutlined, AuditOutlined } from '@ant-design/icons';
+import {
+    DashboardOutlined,
+    SettingOutlined,
+    UserOutlined,
+    ProfileOutlined,
+    AuditOutlined,
+    UsergroupAddOutlined,
+    IdcardOutlined
+} from '@ant-design/icons';
 
 export const MANAGE_MENU = [
     {
@@ -9,10 +17,29 @@ export const MANAGE_MENU = [
         href: '/manage'
     },
     {
-        key: 'user_profile',
-        label: '个人信息',
+        key: 'user',
+        label: '用户',
         icon: <UserOutlined />,
-        href: '/manage/user/profile'
+        children: [{
+            key: 'user_profile',
+            label: '个人信息',
+            icon: <IdcardOutlined />,
+            href: '/manage/user/profile'
+        },
+        {
+            key: 'user_management',
+            label: '用户管理',
+            icon: <UsergroupAddOutlined />,
+            href: '/manage/user/list',
+            roles: ['admin'],
+            children: [{
+                key: 'user_edit',
+                label: '用户编辑',
+                href: '/manage/user/edit/*',
+                roles: ['admin'],
+                hidden: true
+            }]
+        }]
     },
     {
         key: 'system_config',
@@ -46,6 +73,10 @@ export function getMenuItems(me, menu) {
     const menuItems = [];
 
     for (const item of menu) {
+        if (item.hidden) {
+            continue;
+        }
+
         if (item.roles && !item.roles.includes(role)) {
             continue;
         }
@@ -58,6 +89,9 @@ export function getMenuItems(me, menu) {
         }
         if (item.children) {
             subItem.children = getMenuItems(me, item.children);
+            if (!subItem?.children?.length) {
+                subItem.children = undefined;
+            }
         }
         menuItems.push(subItem);
     }
@@ -95,6 +129,17 @@ export function getRedirectPath(me, menu, key) {
     }
 }
 
+function match(pattern, text) {
+    // console.log('pattern', pattern, 'text', text);
+    if (pattern?.indexOf('*') > -1) {
+        pattern = pattern.replace('*', '');
+        // console.log(text?.startsWith(pattern));
+        return text?.startsWith(pattern);
+    }
+    // console.log(pattern === text);
+    return pattern === text;
+}
+
 export function getOpenKeys(route, menu) {
     for (const item of menu) {
         if (item.children) {
@@ -103,7 +148,7 @@ export function getOpenKeys(route, menu) {
                 return [item.key];
             }
         }
-        if (item.href === route) {
+        if (match(item.href, route)) {
             return [item.key];
         }
     }
@@ -112,7 +157,7 @@ export function getOpenKeys(route, menu) {
 
 export function hasAccess(me, href, menu) {
     for (const item of menu) {
-        if (item.href === href) {
+        if (match(item.href, href)) {
             if (item.roles && !item.roles.includes(me.user_type)) {
                 return false;
             }
@@ -124,6 +169,7 @@ export function hasAccess(me, href, menu) {
             }
         }
     }
+    return true;
 }
 
 export function getBreadcrumb(route, menu) {
@@ -135,7 +181,7 @@ export function getBreadcrumb(route, menu) {
                 return crumbs;
             }
         }
-        if (item.href === route) {
+        if (match(item.href, route)) {
             return [item];
         }
     }
@@ -148,12 +194,7 @@ export function getBreadcrumbItems(route, menu, router) {
         return {
             key: item.key,
             title: item.label,
-            href: item.href,
-            onClick: () => {
-                if (item.href) {
-                    window.location.href = item.href;
-                }
-            }
+            href: index < l.length - 1 ? item.href : undefined,
         }
     });
 }

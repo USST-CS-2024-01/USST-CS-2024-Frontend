@@ -122,7 +122,7 @@ export default function LogList() {
                 }}
                 editable={false}
                 columnsState={{
-                    persistenceKey: 'pro-table-singe-demos',
+                    persistenceKey: 'scs:manage:log-list-table',
                     persistenceType: 'localStorage',
                     defaultValue: {
                         option: { fixed: 'right', disable: true },
@@ -138,17 +138,6 @@ export default function LogList() {
                 options={{
                     setting: {
                         listsHeight: 400,
-                    },
-                }}
-                form={{
-                    // 由于配置了 transform，提交的参与与定义的不同这里需要转化一下
-                    syncToUrl: (values, type) => {
-                        if (type === 'get') {
-                            return {
-                                ...values,
-                            };
-                        }
-                        return values;
                     },
                 }}
                 pagination={{

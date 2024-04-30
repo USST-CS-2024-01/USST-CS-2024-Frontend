@@ -1,12 +1,10 @@
 "use client"
-import Image from 'next/image'
 import { Breadcrumb, Spin } from 'antd';
 import { useEffect, useState } from 'react';
-import { ProForm, ProFormItem, ProFormText, ProFormTextArea, ProTable } from '@ant-design/pro-components';
+import { ProForm, ProFormText } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
 import { useRouter } from 'next/navigation';
 import { user } from '@/api/index';
-import { LoadingOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import useSWR from 'swr';
 

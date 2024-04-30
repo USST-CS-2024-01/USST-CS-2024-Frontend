@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getSiteConfig } from "@/store/site_config";
 import { user } from "@/api/index";
-import { DashboardOutlined, SettingOutlined, ProfileOutlined, AuditOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
+import { IdcardOutlined, SettingOutlined, ProfileOutlined, AuditOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { getAvatar } from "@/store/avatar";
 import { getSelectedKeys, getOpenKeys, getMenuItems, getRedirectPath, hasAccess, MANAGE_MENU } from "@/util/menu";
@@ -55,7 +55,7 @@ const RootLayout = ({ children }) => {
         {
             label: '个人信息',
             key: 'profile',
-            icon: <UserOutlined />,
+            icon: <IdcardOutlined />,
             onClick: () => {
                 window.location.href = '/manage/user/profile'
             }
@@ -116,15 +116,18 @@ const RootLayout = ({ children }) => {
                 }} className="flex items-center">
                     <Menu style={{
                         border: "none",
-                    }} selectedKeys={[]}>
-                        <Dropdown menu={{ items: userDropdown }}>
-                            <Menu.Item>
+                    }} selectedKeys={[]} items={[
+                        {
+                            key: 'user',
+                            label: (<Dropdown menu={{ items: userDropdown }}>
                                 <div className="flex items-center gap-2 h-full">
                                     <Avatar src={avatar}>{me.name[0].toUpperCase()}</Avatar>
                                     <span className="text-base">{me.name}</span>
                                 </div>
-                            </Menu.Item>
-                        </Dropdown>
+                            </Dropdown>)
+                        }
+                    ]}>
+
                     </Menu>
                 </Header>
                 <Content>{children}</Content>
