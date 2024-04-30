@@ -44,3 +44,23 @@ export async function getUserList(params, sort, filter) {
     data.success = true;
     return data;
 }
+
+export async function getUser(id) {
+    const user = await get(`/user/${id}`);
+    return user?.data;
+}
+
+export async function createUser(data) {
+    const user = await post('/user/create', data);
+    return user?.data;
+}
+
+export async function updateUser(id, data) {
+    const user = await put(`/user/${id}`, data);
+    return user?.data;
+}
+
+export async function deleteUser(id) {
+    const user = await del(`/user/${id}`);
+    return user?.data;
+}

@@ -71,7 +71,7 @@ const CONFIG_MODEL = [
 export default function SiteConfig() {
     const [breadcrumb, setBreadcrumb] = useState([]);
     const router = useRouter()
-    const [refreshKey, setRefreshKey] = useState(1);
+    const [refreshKey, setRefreshKey] = useState(Date.now());
     const { data, error, isLoading } = useSWR(refreshKey, (key) => site_config.getAllConfig())
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = ProForm.useForm();

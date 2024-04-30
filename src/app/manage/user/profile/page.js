@@ -12,7 +12,7 @@ import useSWR from 'swr';
 export default function UserProfile() {
     const [breadcrumb, setBreadcrumb] = useState([]);
     const router = useRouter()
-    const [refreshKey, setRefreshKey] = useState(1);
+    const [refreshKey, setRefreshKey] = useState(Date.now());
     const { data, error, isLoading } = useSWR(refreshKey, (key) => user.getMeUser())
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = ProForm.useForm();

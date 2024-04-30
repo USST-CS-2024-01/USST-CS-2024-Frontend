@@ -101,8 +101,8 @@ const RootLayout = ({ children }) => {
                         marginTop: collapsed ? '30px' : '80px',
                     }}
                     onClick={({ key }) => {
-                        // router.push(getRedirectPath(me, MANAGE_MENU, key));
-                        window.location.href = getRedirectPath(me, MANAGE_MENU, key);
+                        router.push(getRedirectPath(me, MANAGE_MENU, key));
+                        // window.location.href = getRedirectPath(me, MANAGE_MENU, key);
                     }}
                 />
             </Sider>
