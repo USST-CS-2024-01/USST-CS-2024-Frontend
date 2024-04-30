@@ -56,8 +56,8 @@ const RootLayout = ({ children }) => {
             label: '个人信息',
             key: 'profile',
             icon: <UserOutlined />,
-            onclick: () => {
-                router.push('/manage/user/profile');
+            onClick: () => {
+                window.location.href = '/manage/user/profile'
             }
         },
         {
@@ -101,7 +101,8 @@ const RootLayout = ({ children }) => {
                         marginTop: collapsed ? '30px' : '80px',
                     }}
                     onClick={({ key }) => {
-                        router.push(getRedirectPath(me, MANAGE_MENU, key));
+                        // router.push(getRedirectPath(me, MANAGE_MENU, key));
+                        window.location.href = getRedirectPath(me, MANAGE_MENU, key);
                     }}
                 />
             </Sider>
@@ -119,7 +120,7 @@ const RootLayout = ({ children }) => {
                         <Dropdown menu={{ items: userDropdown }}>
                             <Menu.Item>
                                 <div className="flex items-center gap-2 h-full">
-                                    <Avatar src={avatar}>{me.name[0]}</Avatar>
+                                    <Avatar src={avatar}>{me.name[0].toUpperCase()}</Avatar>
                                     <span className="text-base">{me.name}</span>
                                 </div>
                             </Menu.Item>

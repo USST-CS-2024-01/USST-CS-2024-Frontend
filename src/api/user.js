@@ -10,3 +10,11 @@ export async function getAvatar(userId) {
     const avatar = await get(`/user/${userId}/avatar`);
     return avatar?.data?.avatar;
 }
+
+export async function updateMeUser(data) {
+    const user = await put('/user/me', {
+        email: data?.email,
+        password: data?.password,
+    });
+    return user?.data;
+}

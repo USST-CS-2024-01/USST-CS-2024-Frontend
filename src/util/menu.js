@@ -40,7 +40,7 @@ export const MANAGE_MENU = [
 
 export function getMenuItems(me, menu) {
     const role = me.user_type;
-    menu = menu || manage_menu;
+    menu = menu || MANAGE_MENU;
 
 
     const menuItems = [];
@@ -151,7 +151,7 @@ export function getBreadcrumbItems(route, menu, router) {
             href: item.href,
             onClick: () => {
                 if (item.href) {
-                    router.push(item.href);
+                    window.location.href = item.href;
                 }
             }
         }
