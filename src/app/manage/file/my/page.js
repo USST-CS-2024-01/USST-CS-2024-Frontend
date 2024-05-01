@@ -1,7 +1,7 @@
 "use client"
-import { Breadcrumb, Button, Dropdown, Input, Modal, Popconfirm, Spin, Tag, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
-import { ProForm, ProFormText, ProTable } from '@ant-design/pro-components';
+import { Breadcrumb, Button, Input, Modal, Popconfirm, Tag, Tooltip, Table } from 'antd';
+import { useEffect, useState, useRef } from 'react';
+import { ProTable } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
 import { useRouter } from 'next/navigation';
 import { file, user } from '@/api/index';
@@ -13,47 +13,36 @@ import {
     EditOutlined,
     DeleteOutlined,
     CloudSyncOutlined,
-    PlusOutlined,
-    UploadOutlined,
-    FileOutlined
+    ExclamationCircleFilled
 } from '@ant-design/icons';
+import UploadButton from '@/component/upload_button';
 
 export default function FileList() {
     const [breadcrumb, setBreadcrumb] = useState([]);
     const router = useRouter()
     const [me, setMe] = useState({});
     const [messageApi, contextHolder] = message.useMessage();
-    const [form] = ProForm.useForm();
     const [downloading, setDownloading] = useState(false);
     const [renaming, setRenaming] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [fileId, setFileId] = useState(null);
     const [fileNewName, setFileNewName] = useState(null);
+    const actionRef = useRef();
+    const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+    const { confirm } = Modal;
 
     useEffect(() => {
         setBreadcrumb(getBreadcrumbItems(globalThis.location.pathname, MANAGE_MENU, router))
     }, [router])
 
-    const uploadActions = [
-        {
-            label: '上传文件',
-            key: 'upload_file',
-            icon: <UploadOutlined />,
-            onClick: () => {
-                // TODO
-                console.log('upload_file')
-            }
-        },
-        {
-            label: '创建空白文件',
-            key: 'create_file',
-            icon: <FileOutlined />,
-            onClick: () => {
-                // TODO
-                console.log('create_file')
-            }
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (selectedRowKeys, selectedRows) => {
+            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRows(selectedRows);
         }
-    ]
+    };
 
     const FILE_COLUMNS = [
         {
@@ -127,7 +116,7 @@ export default function FileList() {
                 return bytesToSize(text)
             },
             sorter: true,
-        }, 
+        },
         {
             title: '最近修改',
             dataIndex: 'modify_date',
@@ -256,6 +245,7 @@ export default function FileList() {
                         </Button>
                     </Tooltip>,
                     <Popconfirm
+                        placement="left"
                         key={'delete'}
                         title="确定删除这个文件吗?"
                         onConfirm={async () => {
@@ -312,6 +302,7 @@ export default function FileList() {
 
             <Modal
                 title="文件重命名"
+                centered
                 open={isModalOpen}
                 onOk={async () => {
                     if (renaming) {
@@ -362,6 +353,7 @@ export default function FileList() {
                 className="mt-5"
                 columns={FILE_COLUMNS}
                 cardBordered
+                rowSelection={rowSelection}
                 request={async (params, sort, filter) => {
                     let me_id = me?.id
                     if (!me_id) {
@@ -373,6 +365,7 @@ export default function FileList() {
                     return await file.getFileList(params, sort, filter);
                 }}
                 editable={false}
+                actionRef={actionRef}
                 columnsState={{
                     persistenceKey: 'scs:manage:file-list-table',
                     persistenceType: 'localStorage',
@@ -397,15 +390,48 @@ export default function FileList() {
                 }}
                 dateFormatter="string"
                 toolBarRender={() => [
-                    <Dropdown menu={{ items: uploadActions }} trigger={['click']} key={"upload"}>
-                        <Button
-                            key="button"
-                            icon={<PlusOutlined />}
-                        >
-                            新增文件
-                        </Button>
-                    </Dropdown>
+                    <UploadButton key="upload" onUploaded={() => {
+                        actionRef.current?.reload();
+                    }} />
                 ]}
+
+                tableAlertOptionRender={() => {
+                    return (
+                        <Button
+                            type="text"
+                            danger
+                            onClick={() => {
+                                confirm({
+                                    title: '确认批量删除这些文件吗?',
+                                    icon: <ExclamationCircleFilled />,
+                                    content: '删除后无法恢复，请谨慎操作',
+                                    async onOk() {
+                                        for (let i = 0; i < selectedRows.length; i++) {
+                                            const row = selectedRows[i];
+                                            try {
+                                                await file.deleteFile(row.id).then(() => {
+                                                    actionRef.current?.reload();
+                                                })
+                                            } catch (e) {
+                                                console.error(e);
+                                            }
+                                        }
+                                        setSelectedRows([]);
+                                        setSelectedRowKeys([]);
+                                        actionRef.current?.reload();
+                                    },
+                                    okText: '确认',
+                                    cancelText: '取消',
+                                    centered: true,
+                                    okType: 'danger',
+                                    danger: true,
+                                });
+                            }}
+                        >
+                            批量删除
+                        </Button>
+                    );
+                }}
             />
         </div>
     )
