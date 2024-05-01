@@ -9,7 +9,7 @@ import {
     IdcardOutlined,
     ReadOutlined,
     FileTextOutlined,
-    FileSyncOutlined
+    SnippetsOutlined
 } from '@ant-design/icons';
 
 export const MANAGE_MENU = [
@@ -31,6 +31,12 @@ export const MANAGE_MENU = [
                 href: '/manage/class/my_class'
             },
             {
+                key: 'class_template',
+                label: '班级模板',
+                icon: <SnippetsOutlined />,
+                href: '/class/1/',
+            },
+            {
                 key: 'class_management',
                 label: '班级管理',
                 icon: <SettingOutlined />,
@@ -41,6 +47,13 @@ export const MANAGE_MENU = [
                         key: 'class_edit',
                         label: '班级编辑',
                         href: '/manage/class/edit/*',
+                        roles: ['admin'],
+                        hidden: true
+                    },
+                    {
+                        key: 'class_delete',
+                        label: '班级删除',
+                        href: '/manage/class/delete/*',
                         roles: ['admin'],
                         hidden: true
                     }

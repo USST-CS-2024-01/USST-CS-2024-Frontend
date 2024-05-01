@@ -15,7 +15,7 @@ import {
     CloudSyncOutlined,
     ExclamationCircleFilled
 } from '@ant-design/icons';
-import UploadButton from '@/component/upload_button';
+import UploadButton from '@/components/upload_button';
 
 export default function FileList() {
     const [breadcrumb, setBreadcrumb] = useState([]);
