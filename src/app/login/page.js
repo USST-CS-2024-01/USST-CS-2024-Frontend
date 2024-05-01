@@ -13,7 +13,7 @@ import { message, theme } from 'antd';
 import { useEffect, useState } from 'react';
 import { auth } from '@/api/index';
 import { setLoginSession } from '@/store/session';
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next-nprogress-bar';
 
 const Page = ({ router }) => {
     const [siteConfig, setSiteConfig] = useState({});

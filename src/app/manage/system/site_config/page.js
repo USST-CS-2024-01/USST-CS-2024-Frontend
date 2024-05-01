@@ -4,7 +4,7 @@ import { Breadcrumb, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { ProForm, ProFormText, ProFormTextArea, ProTable } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
 import { site_config } from '@/api/index';
 import { LoadingOutlined } from '@ant-design/icons';
 import { message } from 'antd';

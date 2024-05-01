@@ -1,13 +1,7 @@
 "use client";
-import { Button, Dropdown, Input, Modal, Upload, message } from "antd";
+import { Button, Modal, Upload, message } from "antd";
 import {
-    DownloadOutlined,
-    EditOutlined,
-    DeleteOutlined,
-    CloudSyncOutlined,
-    PlusOutlined,
     UploadOutlined,
-    FileOutlined,
     InboxOutlined
 } from '@ant-design/icons';
 import { useState } from "react";
@@ -82,7 +76,7 @@ export default function UploadButton({ onCancel, onUploaded }) {
                 return;
             }
         }
-        
+
         let successCount = 0;
         setUploading(true);
         // 上传文件

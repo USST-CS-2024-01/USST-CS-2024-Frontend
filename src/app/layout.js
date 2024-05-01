@@ -1,9 +1,8 @@
 "use client"
 import './globals.css'
-import { Inter } from 'next/font/google'
+// import { Inter } from 'next/font/google'
 import { AntdRegistry } from '@ant-design/nextjs-registry';
-import Head from 'next/head';
-import Script from 'next/script';
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -26,7 +25,13 @@ const RootLayout = ({ children }) => {
             </head>
 
             <body /*className={inter.className}*/>
-                <AntdRegistry>{children}</AntdRegistry>
+                <ProgressBar
+                    options={{ showSpinner: false }}
+                    shallowRouting
+                />
+                <AntdRegistry>
+                    {children}
+                </AntdRegistry>
             </body>
         </html>
     );

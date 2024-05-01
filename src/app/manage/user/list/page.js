@@ -3,7 +3,7 @@ import { Breadcrumb, Button, Popconfirm, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { ProTable } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
 import { user } from '@/api/index';
 import { PlusOutlined } from '@ant-design/icons';
 

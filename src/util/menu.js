@@ -232,7 +232,13 @@ export function getBreadcrumbItems(route, menu, router) {
         return {
             key: item.key,
             title: item.label,
-            href: index < l.length - 1 ? item.href : undefined,
+            href: index < l.length - 1 ? '#' : undefined,
+            onClick: () => {
+                const href = index < l.length - 1 ? item.href : undefined;
+                if (href) {
+                    router.push(href);
+                }
+            }
         }
     });
 }
