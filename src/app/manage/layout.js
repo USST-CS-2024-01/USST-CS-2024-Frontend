@@ -5,8 +5,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getSiteConfig } from "@/store/site_config";
 import { user } from "@/api/index";
-import { IdcardOutlined, SettingOutlined, ProfileOutlined, AuditOutlined, UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import { useRouter } from "next/navigation";
+import { IdcardOutlined, LogoutOutlined } from "@ant-design/icons";
+import { useRouter } from 'next-nprogress-bar';
 import { getAvatar } from "@/store/avatar";
 import { getSelectedKeys, getOpenKeys, getMenuItems, getRedirectPath, hasAccess, MANAGE_MENU } from "@/util/menu";
 import { logout } from "@/store/session";
@@ -57,7 +57,8 @@ const RootLayout = ({ children }) => {
             key: 'profile',
             icon: <IdcardOutlined />,
             onClick: () => {
-                window.location.href = '/manage/user/profile'
+                // window.location.href = '/manage/user/profile'
+                router.push('/manage/user/profile');
             }
         },
         {

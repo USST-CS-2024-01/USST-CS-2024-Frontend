@@ -3,7 +3,8 @@ import { Breadcrumb, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { ProForm, ProFormSelect, ProFormText } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
-import { notFound, useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
+import { notFound } from 'next/navigation';
 import { user } from '@/api/index';
 import { message } from 'antd';
 import useSWR from 'swr';
@@ -78,7 +79,7 @@ export default function UserEdit({ params }) {
                 type: 'success',
                 content: '更新成功'
             })
-            
+
             if (id === 'new') {
                 router.push('/manage/user/list')
             }

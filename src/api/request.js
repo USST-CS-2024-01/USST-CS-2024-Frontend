@@ -61,9 +61,13 @@ export function put(url, data) {
     });
 }
 
-export function del(url) {
+export function del(url, data) {
     return request(url, {
         method: 'DELETE',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+        },
     });
 }
 

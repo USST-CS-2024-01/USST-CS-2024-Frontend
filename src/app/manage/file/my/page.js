@@ -3,7 +3,7 @@ import { Breadcrumb, Button, Input, Modal, Popconfirm, Tag, Tooltip, Table } fro
 import { useEffect, useState, useRef } from 'react';
 import { ProTable } from '@ant-design/pro-components';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next-nprogress-bar';
 import { file, user } from '@/api/index';
 import { message } from 'antd';
 import { bytesToSize } from '@/util/string';
@@ -15,7 +15,7 @@ import {
     CloudSyncOutlined,
     ExclamationCircleFilled
 } from '@ant-design/icons';
-import UploadButton from '@/component/upload_button';
+import UploadButton from '@/components/upload_button';
 
 export default function FileList() {
     const [breadcrumb, setBreadcrumb] = useState([]);
@@ -343,6 +343,7 @@ export default function FileList() {
                         })
                     }
                     setRenaming(false)
+                    actionRef.current?.reload();
                 }}
                 onCancel={() => setIsModalOpen(false)}
             >

@@ -3,6 +3,7 @@ import * as site_config from './site_config';
 import * as user from './user';
 import * as log from './log';
 import * as file from './file';
+import * as clazz from './clazz';
 
 export {
     auth,
@@ -10,4 +11,5 @@ export {
     user,
     log,
     file,
+    clazz
 }
