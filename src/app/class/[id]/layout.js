@@ -143,8 +143,7 @@ const RootLayout = ({ params, children }) => {
                         mode="inline"
                         items={menuItem}
                         selectedKeys={selectedKeys}
-                        openKeys={openKeys}
-                        onOpenChange={(keys) => setOpenKeys(keys)}
+                        defaultOpenKeys={openKeys}
                         onSelect={({ key }) => {
                             setSelectedKeys([key]);
                         }}
@@ -156,7 +155,9 @@ const RootLayout = ({ params, children }) => {
                         }}
                     />
                 </Sider>
-                <Content>{children}</Content>
+                <Content className="overflow-auto h-[calc(100vh-64px)]">
+                    {children}
+                </Content>
             </Layout>
         </Layout>
     )

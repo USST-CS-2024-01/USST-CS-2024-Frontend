@@ -114,8 +114,7 @@ const RootLayout = ({ children }) => {
                     mode="inline"
                     items={menuItem}
                     selectedKeys={selectedKeys}
-                    openKeys={openKeys}
-                    onOpenChange={(keys) => setOpenKeys(keys)}
+                    defaultOpenKeys={openKeys}
                     onSelect={({ key }) => {
                         setSelectedKeys([key]);
                     }}
@@ -152,10 +151,9 @@ const RootLayout = ({ children }) => {
 
                     </Menu>
                 </Header>
-                <Content>{children}</Content>
-                <Footer>
-                    &copy;&nbsp;{new Date().getFullYear()}&nbsp;{siteConfig['course:title']}
-                </Footer>
+                <Content className="overflow-auto h-[calc(100vh-64px)]">
+                    {children}
+                </Content>
             </Layout>
         </Layout>
     )
