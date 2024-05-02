@@ -19,8 +19,12 @@ const RootLayout = ({ children }) => {
     const [siteConfig, setSiteConfig] = useState({});
     const [me, setMe] = useState({ name: 'username' });
     const router = useRouter();
-    const [route, setRoute] = useState(window?.location?.pathname);
+    const [route, setRoute] = useState(globalThis?.__incrementalCache?.requestHeaders?.['x-invoke-path']);
     const [avatar, setAvatar] = useState();
+
+    const [selectedKeys, setSelectedKeys] = useState([]);
+    const [openKeys, setOpenKeys] = useState([]);
+    const [menuItem, setMenuItem] = useState([]);
 
     useEffect(() => {
         setRoute(window.location.pathname);
@@ -49,7 +53,20 @@ const RootLayout = ({ children }) => {
             let avatar = await getAvatar(me.id);
             setAvatar(avatar);
         })()
-    }, [me]);
+        setMenuItem(getMenuItems(me, MANAGE_MENU));
+        setSelectedKeys(getSelectedKeys(route, MANAGE_MENU));
+        openKeys.push(...getOpenKeys(route, MANAGE_MENU));
+        setOpenKeys(openKeys);
+    }, [me, route, openKeys]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (route != window.location.pathname) {
+                setRoute(window.location.pathname);
+                clearInterval(interval);
+            }
+        }, 1000);
+    }, [route])
 
     const userDropdown = [
         {
@@ -95,9 +112,13 @@ const RootLayout = ({ children }) => {
 
                 <Menu
                     mode="inline"
-                    defaultSelectedKeys={getSelectedKeys(route, MANAGE_MENU)}
-                    defaultOpenKeys={getOpenKeys(route, MANAGE_MENU)}
-                    items={getMenuItems(me, MANAGE_MENU)}
+                    items={menuItem}
+                    selectedKeys={selectedKeys}
+                    openKeys={openKeys}
+                    onOpenChange={(keys) => setOpenKeys(keys)}
+                    onSelect={({ key }) => {
+                        setSelectedKeys([key]);
+                    }}
                     style={{
                         marginTop: collapsed ? '30px' : '80px',
                     }}

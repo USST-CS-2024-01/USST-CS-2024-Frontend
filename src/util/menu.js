@@ -9,8 +9,53 @@ import {
     IdcardOutlined,
     ReadOutlined,
     FileTextOutlined,
-    SnippetsOutlined
+    SnippetsOutlined,
+    CarryOutOutlined,
+    ProjectOutlined,
+    TeamOutlined,
+    TrophyOutlined,
+    FolderOpenOutlined,
+    FormOutlined
 } from '@ant-design/icons';
+
+export const CLASS_MENU = [
+    {
+        key: 'home',
+        label: '看板',
+        icon: <CarryOutOutlined />,
+        href: '/class/{id}'
+    },
+    {
+        key: 'todo',
+        label: '待办事项',
+        icon: <ProjectOutlined />,
+        href: '/class/{id}/todo'
+    },
+    {
+        key: 'task',
+        label: '任务',
+        icon: <FormOutlined />,
+        href: '/class/{id}/task'
+    },
+    {
+        key: 'file',
+        label: '团队空间',
+        icon: <FolderOpenOutlined />,
+        href: '/class/{id}/file'
+    },
+    {
+        key: 'team',
+        label: '我的团队',
+        icon: <TeamOutlined />,
+        href: '/class/{id}/team'
+    },
+    {
+        key: 'score',
+        label: '成绩',
+        icon: <TrophyOutlined />,
+        href: '/class/{id}/score'
+    }
+];
 
 export const MANAGE_MENU = [
     {
@@ -151,71 +196,85 @@ export function getMenuItems(me, menu) {
 }
 
 
-export function getSelectedKeys(route, menu) {
-    for (const item of menu) {
-        if (item.children) {
-            const keys = getSelectedKeys(route, item.children);
-            if (keys.length > 0) {
-                return keys;
-            }
-        }
-        if (item.href === route) {
-            return [item.key];
-        }
-    }
-    return []
-}
 
-export function getRedirectPath(me, menu, key) {
-    for (const item of menu) {
-        if (item.key === key) {
-            return item.href;
-        }
-        if (item.children) {
-            const path = getRedirectPath(me, item.children, key);
-            if (path) {
-                return path;
-            }
-        }
+function match(pattern, text, id) {
+    if (!pattern || !text) {
+        return false;
     }
-}
-
-function match(pattern, text) {
+    if (id > 0) {
+        pattern = pattern.replaceAll('{id}', id);
+    }
     // console.log('pattern', pattern, 'text', text);
     if (pattern?.indexOf('*') > -1) {
         pattern = pattern.replace('*', '');
         // console.log(text?.startsWith(pattern));
         return text?.startsWith(pattern);
     }
-    // console.log(pattern === text);
     return pattern === text;
 }
 
-export function getOpenKeys(route, menu) {
+
+export function getSelectedKeys(route, menu, id) {
     for (const item of menu) {
         if (item.children) {
-            const keys = getOpenKeys(route, item.children);
+            const keys = getSelectedKeys(route, item.children, id);
             if (keys.length > 0) {
-                return [item.key];
+                return keys;
             }
         }
-        if (match(item.href, route)) {
+        if (match(item.href, route, id)) {
             return [item.key];
         }
     }
     return []
 }
 
-export function hasAccess(me, href, menu) {
+export function getRedirectPath(me, menu, key, id) {
     for (const item of menu) {
-        if (match(item.href, href)) {
+        if (key === item.key) {
+            if (id) {
+                return item.href.replaceAll('{id}', id);
+            }
+            return item.href;
+        }
+        if (item.children) {
+            const path = getRedirectPath(me, item.children, key, id);
+            if (path) {
+                if (id) {
+                    return path.replaceAll('{id}', id);
+                }
+                return path;
+            }
+        }
+    }
+}
+
+
+export function getOpenKeys(route, menu, id) {
+    for (const item of menu) {
+        if (item.children) {
+            const keys = getOpenKeys(route, item.children, id);
+            if (keys.length > 0) {
+                return [item.key];
+            }
+        }
+        if (match(item.href, route, id)) {
+            return [item.key];
+        }
+    }
+    return []
+}
+
+export function hasAccess(me, href, menu, id) {
+    for (const item of menu) {
+        if (match(item.href, href, id)) {
             if (item.roles && !item.roles.includes(me.user_type)) {
                 return false;
             }
             return true;
         }
         if (item.children) {
-            if (hasAccess(me, href, item.children)) {
+            if (hasAccess(me, href, item.children, id)) {
                 return true;
             }
         }
@@ -223,24 +282,24 @@ export function hasAccess(me, href, menu) {
     return true;
 }
 
-export function getBreadcrumb(route, menu) {
+export function getBreadcrumb(route, menu, id) {
     for (const item of menu) {
         if (item.children) {
-            const crumbs = getBreadcrumb(route, item.children);
+            const crumbs = getBreadcrumb(route, item.children, id);
             if (crumbs.length > 0) {
                 crumbs.unshift(item);
                 return crumbs;
             }
         }
-        if (match(item.href, route)) {
+        if (match(item.href, route, id)) {
             return [item];
         }
     }
     return []
 }
 
-export function getBreadcrumbItems(route, menu, router) {
-    const l = getBreadcrumb(route, menu);
+export function getBreadcrumbItems(route, menu, router, id) {
+    const l = getBreadcrumb(route, menu, id);
     return l.map((item, index) => {
         return {
             key: item.key,
