@@ -52,7 +52,7 @@ const Page = ({ router }) => {
                 content: '登录成功',
             })
 
-            router.push('/');
+            router.push('/manage');
         } catch (error) {
             messageApi.open({
                 key: "login",

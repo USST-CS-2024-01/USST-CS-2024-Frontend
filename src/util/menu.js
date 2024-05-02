@@ -80,6 +80,7 @@ export const MANAGE_MENU = [
                 label: '班级模板',
                 icon: <SnippetsOutlined />,
                 href: '/class/1/',
+                roles: ['admin'],
             },
             {
                 key: 'class_management',
