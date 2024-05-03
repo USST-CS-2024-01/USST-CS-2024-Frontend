@@ -49,11 +49,10 @@ export async function getOnlineEditLink(id) {
     return `${config.API_URL}/file/${id}/onlyoffice/view?token=${token}`;
 }
 
-export async function startUploadSession(fileName, meId) {
+export async function startUploadSession(fileName, uploadAs) {
     const res = await post(`/file/upload`, {
         file_name: fileName,
-        owner_type: "user",
-        owner_id: meId
+        ...uploadAs
     })
     return res
 }

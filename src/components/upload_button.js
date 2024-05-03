@@ -9,7 +9,7 @@ import { flushSync } from 'react-dom';
 import { file } from '@/api/index';
 
 
-export default function UploadButton({ onCancel, onUploaded }) {
+export default function UploadButton({ onCancel, onUploaded, uploadAs }) {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [uploading, setUploading] = useState(false);
     const { Dragger } = Upload;
@@ -119,7 +119,9 @@ export default function UploadButton({ onCancel, onUploaded }) {
         let cancel = false;
 
         try {
-            const { upload_url, session_id } = await file.startUploadSession(uploadFile.name);
+            const { upload_url, session_id } = await file.startUploadSession(uploadFile.name, uploadAs || {
+                owner_type: "user",
+            });
             uploadFile.session_id = session_id;
 
             newFileList[index].percent = 10;

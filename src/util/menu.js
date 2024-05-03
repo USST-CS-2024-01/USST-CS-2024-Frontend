@@ -23,37 +23,36 @@ export const CLASS_MENU = [
         key: 'home',
         label: '看板',
         icon: <CarryOutOutlined />,
-        href: '/class/{id}'
-    },
-    {
-        key: 'todo',
-        label: '待办事项',
-        icon: <ProjectOutlined />,
-        href: '/class/{id}/todo'
+        href: '/class/{id}',
+        roles: ['teacher', 'admin']
     },
     {
         key: 'task',
-        label: '任务',
+        label: '课程任务',
         icon: <FormOutlined />,
-        href: '/class/{id}/task'
+        href: '/class/{id}/task',
+        roles: ['teacher', 'admin']
     },
     {
         key: 'file',
-        label: '团队空间',
+        label: '班级空间',
         icon: <FolderOpenOutlined />,
-        href: '/class/{id}/file'
+        href: '/class/{id}/file',
+        roles: ['teacher', 'admin']
     },
     {
         key: 'team',
-        label: '我的团队',
+        label: '组队管理',
         icon: <TeamOutlined />,
-        href: '/class/{id}/team'
+        href: '/class/{id}/team',
+        roles: ['teacher', 'admin']
     },
     {
         key: 'score',
-        label: '成绩',
+        label: '成绩管理',
         icon: <TrophyOutlined />,
-        href: '/class/{id}/score'
+        href: '/class/{id}/score',
+        roles: ['teacher', 'admin']
     }
 ];
 

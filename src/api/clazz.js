@@ -79,3 +79,8 @@ export async function revertArchiveStage(id) {
     const clazz = await del(`/class/${id}/archive`);
     return clazz?.data;
 }
+
+export async function getRoleList(id) {
+    const clazz = await get(`/class/${id}/role/list`);
+    return clazz?.data;
+}
