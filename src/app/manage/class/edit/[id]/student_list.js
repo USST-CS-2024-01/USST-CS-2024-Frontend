@@ -194,8 +194,10 @@ export default function StudentList({ id }) {
                         userList.forEach(id => {
                             userDict[id] = false
                         })
-                        await clazz.importClassMember(id, userDict)
+                        const res = await clazz.importClassMember(id, userDict)
                         actionRef.current?.reload();
+
+                        return res
                     }}
                 >,
                     <Button

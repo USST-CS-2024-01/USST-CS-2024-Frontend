@@ -1,6 +1,7 @@
 import { Input, Modal } from "antd";
 import { useState } from "react";
 import { message } from "antd";
+import UserSelect from "@/components/user_select";
 
 const { TextArea } = Input;
 
@@ -30,11 +31,11 @@ export default function ImportModal({ children, onImport }) {
                     return;
                 }
                 try {
-                    await onImport(ids);
+                    const result = await onImport(ids);
                     messageApi.open({
                         type: "success",
                         key: "import_user",
-                        content: `导入成功`
+                        content: `导入成功${result.success_count}个用户，失败${result.failed_count}个用户`
                     })
                     setInputData('')
                     setIsModalOpen(false)
@@ -52,7 +53,22 @@ export default function ImportModal({ children, onImport }) {
                 setInputData('')
             }}
         >
-            <div className="text-sm text-gray-500 mb-2">请在此输入要导入的用户ID，一行一个</div>
+            <div className="mb-2 mt-5">
+                <UserSelect
+                    mode="multiple"
+                    value={[]}
+                    placeholder={"快速搜索用户以添加"}
+                    onChange={(value) => {
+                        setInputData(
+                            inputData + value.map(x => x.key).join('\n') + '\n'
+                        )
+                    }}
+                    style={{
+                        width: '100%'
+                    }}
+                />
+            </div>
+            <div className="text-sm text-gray-500 mb-2">在此输入要导入的用户ID，一行一个。</div>
             <TextArea
                 type="textarea"
                 value={inputData}

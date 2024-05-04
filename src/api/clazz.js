@@ -50,7 +50,7 @@ export async function importClassMember(id, data) {
     const clazz = await post(`/class/${id}/member`, {
         user_dict: data
     });
-    return clazz?.data;
+    return clazz;
 }
 
 export async function deleteClassMember(id, userIdList) {

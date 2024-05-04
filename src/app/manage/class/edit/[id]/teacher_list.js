@@ -140,8 +140,10 @@ export default function TeacherList({ id }) {
                         userList.forEach(id => {
                             userDict[id] = true
                         })
-                        await clazz.importClassMember(id, userDict)
+                        const res = await clazz.importClassMember(id, userDict)
                         actionRef.current?.reload();
+
+                        return res
                     }}
                 >,
                     <Button

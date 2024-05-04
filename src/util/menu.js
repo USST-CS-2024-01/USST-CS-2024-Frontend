@@ -50,7 +50,15 @@ export const CLASS_MENU = [
         key: 'team',
         label: '组队管理',
         icon: <TeamOutlined />,
-        href: '/class/{id}/team'
+        href: '/class/{id}/grouping',
+        children: [
+            {
+                key: 'team_edit',
+                label: '小组编辑',
+                href: '/class/{id}/grouping/edit/*',
+                hidden: true
+            },
+        ]
     },
     {
         key: 'score',
@@ -310,10 +318,12 @@ export function getBreadcrumbItems(route, menu, router, id) {
             title: item.label,
             href: index < l.length - 1 ? '#' : undefined,
             onClick: () => {
-                const href = index < l.length - 1 ? item.href : undefined;
-                if (href) {
-                    router.push(href);
+                let href = index < l.length - 1 ? item.href : undefined;
+                if (!href) return;
+                if (id) {
+                    href = href.replaceAll('{id}', id);
                 }
+                router.push(href);
             }
         }
     });

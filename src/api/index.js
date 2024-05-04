@@ -5,6 +5,7 @@ import * as log from './log';
 import * as file from './file';
 import * as clazz from './clazz';
 import * as task from './task';
+import * as group from './group';
 
 export {
     auth,
@@ -13,5 +14,6 @@ export {
     log,
     file,
     clazz,
-    task
+    task,
+    group
 }
