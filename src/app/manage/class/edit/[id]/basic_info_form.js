@@ -5,6 +5,7 @@ import MonacoEditor from '@monaco-editor/react'
 import { useEffect, useState } from "react"
 import { clazz } from "@/api"
 import useSWR from "swr"
+import { getUser } from "@/store/session"
 
 export default function BasicClassInfoForm({ id, onUpdate }) {
     const [form] = ProForm.useForm()
@@ -12,6 +13,7 @@ export default function BasicClassInfoForm({ id, onUpdate }) {
     const [messageApi, contextHolder] = message.useMessage();
     const [refreshKey, setRefreshKey] = useState(Date.now());
     const [updating, setUpdating] = useState(false);
+    const { data: me } = useSWR('me', getUser)
     const { data, error, isLoading } = useSWR(refreshKey, (key) => {
         if (id === 'new') {
             return clazz.getClass(1)
@@ -96,6 +98,7 @@ export default function BasicClassInfoForm({ id, onUpdate }) {
                             required
                             placeholder="班级名称，长度不超过50个字符"
                             rules={[{ required: true, max: 50 }]}
+                            disabled={me?.user_type !== 'admin'}
                         />
                         <ProForm.Item
                             label="班级介绍"

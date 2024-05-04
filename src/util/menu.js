@@ -11,7 +11,7 @@ import {
     FileTextOutlined,
     SnippetsOutlined,
     CarryOutOutlined,
-    ProjectOutlined,
+    TagsOutlined,
     TeamOutlined,
     TrophyOutlined,
     FolderOpenOutlined,
@@ -27,6 +27,13 @@ export const CLASS_MENU = [
         roles: ['teacher', 'admin']
     },
     {
+        key: 'role',
+        label: '班级角色',
+        icon: <TagsOutlined />,
+        href: '/class/{id}/role',
+        roles: ['teacher', 'admin']
+    },
+    {
         key: 'task',
         label: '课程任务',
         icon: <FormOutlined />,
@@ -37,22 +44,19 @@ export const CLASS_MENU = [
         key: 'file',
         label: '班级空间',
         icon: <FolderOpenOutlined />,
-        href: '/class/{id}/file',
-        roles: ['teacher', 'admin']
+        href: '/class/{id}/file'
     },
     {
         key: 'team',
         label: '组队管理',
         icon: <TeamOutlined />,
-        href: '/class/{id}/team',
-        roles: ['teacher', 'admin']
+        href: '/class/{id}/team'
     },
     {
         key: 'score',
         label: '成绩管理',
         icon: <TrophyOutlined />,
-        href: '/class/{id}/score',
-        roles: ['teacher', 'admin']
+        href: '/class/{id}/score'
     }
 ];
 
@@ -86,13 +90,13 @@ export const MANAGE_MENU = [
                 label: '班级管理',
                 icon: <SettingOutlined />,
                 href: '/manage/class/list',
-                roles: ['admin'],
+                roles: ['admin', 'teacher'],
                 children: [
                     {
                         key: 'class_edit',
                         label: '班级编辑',
                         href: '/manage/class/edit/*',
-                        roles: ['admin'],
+                        roles: ['admin', 'teacher'],
                         hidden: true
                     },
                     {

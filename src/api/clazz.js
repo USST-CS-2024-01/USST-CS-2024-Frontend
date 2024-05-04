@@ -84,3 +84,19 @@ export async function getRoleList(id) {
     const clazz = await get(`/class/${id}/role/list`);
     return clazz?.data;
 }
+
+export async function createRole(id, data) {
+    const clazz = await post(`/class/${id}/role/create`, data);
+    return clazz?.data;
+}
+
+export async function updateRole(id, roleId, data) {
+    const clazz = await put(`/class/${id}/role/${roleId}`, data);
+    return clazz?.data;
+}
+
+export async function deleteRole(id, roleId) {
+    const clazz = await del(`/class/${id}/role/${roleId}`);
+    return clazz?.data;
+}
+

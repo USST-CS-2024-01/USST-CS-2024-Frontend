@@ -72,6 +72,7 @@ export default function ActionPanel({ id }) {
                     title={"启动班级"}
                     description={<>
                         将班级的状态切换至分组中，学生可以开始组队。<br />
+                        <b>请注意，启动后，将无法修改班级角色信息！</b>
                     </>}
                     buttonTitle={"启动"}
                     onClick={async () => {

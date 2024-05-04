@@ -9,12 +9,15 @@ import {
 } from '@ant-design/icons';
 import UserAvatar, { getColor } from "@/components/avatar"
 import ImportModal from "./import_modal"
+import { getUser } from "@/store/session"
+import useSWR from "swr"
 
 export default function StudentList({ id }) {
     const actionRef = useRef();
     const [messageApi, contextHolder] = message.useMessage();
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
+    const { data: me } = useSWR('me', getUser)
     const { confirm } = Modal;
 
     const rowSelection = {
@@ -137,6 +140,7 @@ export default function StudentList({ id }) {
                             }
                         }}
                         key="delete"
+                        disabled={me?.user_type !== 'admin'}
                     >删除</Button>
                 </div>
             },
@@ -198,6 +202,7 @@ export default function StudentList({ id }) {
                         type="primary"
                         key="button"
                         icon={<ImportOutlined />}
+                        disabled={me?.user_type !== 'admin'}
                     >
                         导入学生
                     </Button>
@@ -208,6 +213,7 @@ export default function StudentList({ id }) {
                     <Button
                         type="text"
                         danger
+                        disabled={me?.user_type !== 'admin'}
                         onClick={() => {
                             confirm({
                                 title: '确认删除',

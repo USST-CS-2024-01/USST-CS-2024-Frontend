@@ -12,10 +12,13 @@ import {
     EyeOutlined
 } from '@ant-design/icons';
 import UserAvatar from '@/components/avatar';
+import useSWR from 'swr';
+import { getUser } from '@/store/session';
 
 export default function ClassManageList() {
     const [breadcrumb, setBreadcrumb] = useState([]);
     const router = useRouter()
+    const { data: me } = useSWR('me', getUser)
 
     const USER_COLUMNS = [
         {
@@ -150,6 +153,7 @@ export default function ClassManageList() {
                             }}
                             key="delete"
                             icon={<DeleteOutlined />}
+                            disabled={record.id === 1 || me?.user_type !== 'admin'}
                         />
                     </Tooltip>
                 </div>
@@ -206,6 +210,7 @@ export default function ClassManageList() {
                             router.push('/manage/class/edit/new');
                         }}
                         type="primary"
+                        disabled={me?.user_type !== 'admin'}
                     >
                         新建
                     </Button>,
