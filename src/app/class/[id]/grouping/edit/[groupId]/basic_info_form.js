@@ -29,7 +29,7 @@ export default function BasicGroupInfoForm({ classId, groupId, onUpdate, groupIn
     const onFinish = async (values) => {
         const updateData = {
             name: values.name,
-            leader: leader.length > 0 ? leader[0]?.value : null
+            leader: leader?.length > 0 ? leader[0]?.value : null
         }
         if (me?.user_type === 'student') {
             updateData.leader = me?.id

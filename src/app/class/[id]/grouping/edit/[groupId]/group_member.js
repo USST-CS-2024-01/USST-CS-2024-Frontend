@@ -328,6 +328,7 @@ export default function GroupMemberList({ classId, groupId }) {
                     <Button
                         type="primary"
                         icon={<UserAddOutlined />}
+                        disabled={!isLeader}
                     >
                         邀请组员
                     </Button>
