@@ -18,7 +18,6 @@ export default function GroupTaskPage({ params }) {
     const [kw, setKw] = useState('')
     const [searchKw, setSearchKw] = useState('')
     const [onlyMe, setOnlyMe] = useState(false)
-    const [sort, setSort] = useState('priority')
     const [selectedTask, setSelectedTask] = useState(null)
     const [forceRefreshKey, setForceRefreshKey] = useState(0)
     const [open, setOpen] = useState(false)

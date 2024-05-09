@@ -64,7 +64,6 @@ const RootLayout = ({ params, children }) => {
 
     return (
         <Layout style={{
-            minHeight: '100vh',
             backgroundColor: 'transparent',
         }}>
             <Sider style={{

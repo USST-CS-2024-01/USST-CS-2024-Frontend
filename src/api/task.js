@@ -29,3 +29,28 @@ export async function setTaskSequence(classId, data) {
     const task = await post(`/class/${classId}/task/sequence`, data);
     return task?.data;
 }
+
+export async function getGroupTaskChain(classId, groupId) {
+    const data = await get(`/class/${classId}/group/${groupId}/task_chain`);
+    return data;
+}
+
+export async function getTaskMemberScore(classId, groupId, taskId) {
+    const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/group_score`)
+    return data;
+}
+
+export async function setTaskMemberScore(classId, groupId, taskId, data) {
+    const score = await post(`/class/${classId}/group/${groupId}/task/${taskId}/group_score`, data)
+    return score;
+}
+
+export async function getCompletedMemberList(classId, groupId, taskId) {
+    const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/group_score/finished`)
+    return data;
+}
+
+export async function checkTaskCanDelivery(classId, groupId, taskId) {
+    const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/check`)
+    return data;
+}
