@@ -93,3 +93,44 @@ export async function deleteGroupTask(classId, groupId, taskId) {
     const task = await del(`/class/${classId}/group/${groupId}/group_task/${taskId}`);
     return task?.data;
 }
+
+export async function getGroupMeetingList(classId, groupId, params) {
+    params.page = params.current;
+    params.page_size = params.pageSize;
+
+    delete params.current;
+    delete params.pageSize;
+
+    const urlParams = new URLSearchParams(params);
+    const data = await get(`/class/${classId}/group/${groupId}/meeting/list?${urlParams.toString()}`);
+
+    const tsNow = new Date().getTime() / 1000;
+    // 小于当前时间的倒序排列
+    let finished = data.data.filter(item => item.end_time < tsNow).sort((a, b) => b.end_time - a.end_time);
+    // 大于当前时间的正序排列
+    let upcoming = data.data.filter(item => item.end_time >= tsNow).sort((a, b) => a.end_time - b.end_time);
+
+    data.data = upcoming.concat(finished); // 合并
+    data.success = true;
+    return data;
+}
+
+export async function attendGroupMeeting(classId, groupId, meetingId) {
+    const data = await post(`/class/${classId}/group/${groupId}/meeting/${meetingId}/attend`);
+    return data;
+}
+
+export async function deleteGroupMeeting(classId, groupId, meetingId) {
+    const data = await del(`/class/${classId}/group/${groupId}/meeting/${meetingId}`);
+    return data;
+}
+
+export async function updateGroupMeeting(classId, groupId, meetingId, data) {
+    const meeting = await put(`/class/${classId}/group/${groupId}/meeting/${meetingId}`, data);
+    return meeting?.data;
+}
+
+export async function createGroupMeeting(classId, groupId, data) {
+    const meeting = await post(`/class/${classId}/group/${groupId}/meeting/create`, data);
+    return meeting?.data;
+}

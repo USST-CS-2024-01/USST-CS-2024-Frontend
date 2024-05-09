@@ -71,7 +71,7 @@ const RootLayout = ({ params, children }) => {
                 borderRight: '1px solid rgba(0, 0, 0, 0.1)',
             }} theme='light'>
                 <h2 className="text-left text-base font-bold pt-5 pb-1 px-7">
-                    小组空间
+                    {groupInfo?.name}
                 </h2>
                 <Menu
                     mode="inline"
