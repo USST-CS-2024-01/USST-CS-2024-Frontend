@@ -5,10 +5,11 @@ import { Button } from "antd";
 import { file as fileApi } from "@/api/index";
 import {
     DeleteOutlined,
-    DownloadOutlined
+    DownloadOutlined,
+    CloudSyncOutlined
 } from "@ant-design/icons";
 
-export default function FileList({ files, onChange }) {
+export default function FileList({ files, onChange, disabled = false }) {
 
     return <>
         {
@@ -22,6 +23,17 @@ export default function FileList({ files, onChange }) {
                                 {file.name}
                             </span>
                             <div>
+                                {file.file_type === 'document' && <Button
+                                    onClick={() => {
+                                        fileApi.getOnlineEditLink(file.id).then((url) => {
+                                            if (url) {
+                                                window.open(url)
+                                            }
+                                        })
+                                    }}
+                                    type="link"
+                                    icon={<CloudSyncOutlined />}
+                                />}
                                 <Button
                                     onClick={() => {
                                         fileApi.downloadFile(file.id).then((url) => {
@@ -33,14 +45,16 @@ export default function FileList({ files, onChange }) {
                                     type="link"
                                     icon={<DownloadOutlined />}
                                 />
-                                <Button
-                                    onClick={() => {
-                                        onChange(files.filter((item) => item.id !== file.id))
-                                    }}
-                                    icon={<DeleteOutlined />}
-                                    danger
-                                    type="link"
-                                />
+                                {!disabled &&
+                                    <Button
+                                        onClick={() => {
+                                            onChange(files.filter((item) => item.id !== file.id))
+                                        }}
+                                        icon={<DeleteOutlined />}
+                                        danger
+                                        type="link"
+                                    />
+                                }
                             </div>
                         </div>
                     )

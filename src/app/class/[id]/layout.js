@@ -102,11 +102,11 @@ const RootLayout = ({ params, children }) => {
             backgroundColor: 'transparent',
         }}>
             <Header style={{
-                boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)',
                 backgroundColor: 'white',
                 justifyContent: 'space-between',
                 padding: '0 50px 0 5px',
-            }} className="flex items-center justify-between">
+                zIndex: 100
+            }} className="flex items-center justify-between shadow">
                 <div className="flex items-center ml-5 ">
                     <Button
                         icon={<LeftOutlined />}
@@ -124,8 +124,8 @@ const RootLayout = ({ params, children }) => {
                         key: 'user',
                         label: (<Dropdown menu={{ items: userDropdown }}>
                             <div className="flex items-center gap-2 h-full">
-                                <Avatar src={avatar}>{me.name[0].toUpperCase()}</Avatar>
-                                <span className="text-base">{me.name}</span>
+                                <Avatar src={avatar}>{me?.name[0].toUpperCase()}</Avatar>
+                                <span className="text-base">{me?.name}</span>
                             </div>
                         </Dropdown>)
                     }
@@ -135,9 +135,10 @@ const RootLayout = ({ params, children }) => {
             <Layout style={{
                 backgroundColor: 'transparent',
             }}>
-                <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{
+                <Sider collapsed={collapsed} onCollapse={(value) => setCollapsed(value)} style={{
                     borderRight: '1px solid rgba(0, 0, 0, 0.1)',
                     boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)',
+                    zIndex: 101
                 }} theme='light'>
                     <Menu
                         mode="inline"

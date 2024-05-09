@@ -11,6 +11,7 @@ import {
     UserAddOutlined,
     CheckOutlined,
     CloseOutlined,
+    EditOutlined
 } from '@ant-design/icons';
 import useSWR from 'swr';
 import UserAvatar from '@/components/avatar';
@@ -171,18 +172,33 @@ export default function GroupStudentPage({ params }) {
                                 <div
                                     className={"mt-2 py-2 pb-5 bg-white rounded hover:shadow-md transition duration-300 ease-in-out cursor-pointer select-none"}
                                     onClick={() => {
-                                        router.push(`/class/${id}/grouping/edit/${myGroup?.id}`)
+                                        router.push(`/class/${id}/group/${myGroup?.id}`)
                                     }}
                                 >
-                                    <div className={"flex items-center px-5"}>
-                                        {myGroup?.status === 'pending' && <Tag color='orange'>组队中</Tag>}
-                                        {myGroup?.status === 'normal' && <Tag color='green'>组队完成</Tag>}
-                                        <h3 className={"text-lg font-bold"}>
-                                            {myGroup?.name}
-                                        </h3>
-                                        {myGroup?.pending?.length > 0 && <span className={"text-xs text-red-500 ml-1"}>
-                                            （{myGroup.pending.length}人申请加入）
-                                        </span>}
+                                    <div className={"flex items-center px-5 gap-2"}>
+                                        <div className={"flex items-center"}>
+                                            {myGroup?.status === 'pending' && <Tag color='orange'>组队中</Tag>}
+                                            {myGroup?.status === 'normal' && <Tag color='green'>组队完成</Tag>}
+                                            <h3 className={"text-lg font-bold"}>
+                                                {myGroup?.name}
+                                            </h3>
+                                            {myGroup?.pending?.length > 0 && <span className={"text-xs text-red-500 ml-1"}>
+                                                （{myGroup.pending.length}人申请加入）
+                                            </span>}
+                                        </div>
+                                        <div >
+                                            <Tooltip title="编辑小组">
+                                                <Button
+                                                    type='text'
+                                                    icon={<EditOutlined />}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation()
+                                                        router.push(`/class/${id}/grouping/edit/${myGroup?.id}`)
+                                                    }}
+                                                    size='small'
+                                                />
+                                            </Tooltip>
+                                        </div>
                                     </div>
                                     <div className={"flex items-center gap-1 mt-2 px-5"}>
                                         <UserAvatar user={myGroup?.leader} />

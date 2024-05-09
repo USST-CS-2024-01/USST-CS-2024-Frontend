@@ -15,7 +15,12 @@ import {
     TeamOutlined,
     TrophyOutlined,
     FolderOpenOutlined,
-    FormOutlined
+    FormOutlined,
+    HomeTwoTone,
+    CarryOutTwoTone,
+    BookTwoTone,
+    FolderOpenTwoTone,
+    PhoneTwoTone
 } from '@ant-design/icons';
 
 export const CLASS_MENU = [
@@ -65,6 +70,40 @@ export const CLASS_MENU = [
         label: '成绩管理',
         icon: <TrophyOutlined />,
         href: '/class/{id}/score'
+    }
+];
+
+
+export const GROUP_MENU = [
+    {
+        key: 'group_home',
+        label: '我的小组',
+        icon: <HomeTwoTone />,
+        href: '/class/{id}/group/{groupId}'
+    },
+    {
+        key: 'group_task',
+        label: '待办事项',
+        icon: <CarryOutTwoTone />,
+        href: '/class/{id}/group/{groupId}/group_task'
+    },
+    {
+        key: 'group_meeting',
+        label: '小组会议',
+        icon: <PhoneTwoTone />,
+        href: '/class/{id}/group/{groupId}/group_meeting'
+    },
+    {
+        key: 'task',
+        label: '任务交付',
+        icon: <BookTwoTone />,
+        href: '/class/{id}/group/{groupId}/task'
+    },
+    {
+        key: 'file',
+        label: '小组空间',
+        icon: <FolderOpenTwoTone />,
+        href: '/class/{id}/group/{groupId}/file'
     }
 ];
 
@@ -208,14 +247,26 @@ export function getMenuItems(me, menu) {
 }
 
 
+function replaceUrl(url, id) {
+    // 如果 id 为数字，替换掉 pattern 中的 {id}
+    if (id > 0 && (typeof id === 'number' || typeof id === 'string')) {
+        url = url.replaceAll('{id}', id);
+    }
+    // 如果 id 为字典，替换掉 pattern 中字典中的 key
+    if (id && typeof id === 'object') {
+        for (const key in id) {
+            url = url.replaceAll(`{${key}}`, id[key]);
+        }
+    }
+    return url;
+}
+
 
 function match(pattern, text, id) {
     if (!pattern || !text) {
         return false;
     }
-    if (id > 0) {
-        pattern = pattern.replaceAll('{id}', id);
-    }
+    pattern = replaceUrl(pattern, id);
     // console.log('pattern', pattern, 'text', text);
     if (pattern?.indexOf('*') > -1) {
         pattern = pattern.replace('*', '');
@@ -241,11 +292,12 @@ export function getSelectedKeys(route, menu, id) {
     return []
 }
 
+
 export function getRedirectPath(me, menu, key, id) {
     for (const item of menu) {
         if (key === item.key) {
             if (id) {
-                return item.href.replaceAll('{id}', id);
+                return replaceUrl(item.href, id);
             }
             return item.href;
         }
@@ -253,7 +305,7 @@ export function getRedirectPath(me, menu, key, id) {
             const path = getRedirectPath(me, item.children, key, id);
             if (path) {
                 if (id) {
-                    return path.replaceAll('{id}', id);
+                    return replaceUrl(path, id);
                 }
                 return path;
             }
@@ -321,7 +373,7 @@ export function getBreadcrumbItems(route, menu, router, id) {
                 let href = index < l.length - 1 ? item.href : undefined;
                 if (!href) return;
                 if (id) {
-                    href = href.replaceAll('{id}', id);
+                    href = replaceUrl(href, id);
                 }
                 router.push(href);
             }

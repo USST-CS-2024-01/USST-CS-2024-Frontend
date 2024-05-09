@@ -4,13 +4,13 @@ import useSWR from "swr";
 import { clazz, task } from '@/api/index';
 import { ProForm, ProFormDateTimePicker, ProFormDigit, ProFormSelect, ProFormText } from "@ant-design/pro-components";
 import MonacoEditor from '@monaco-editor/react'
-import FileSelectPanel from "./file_select_panel";
+import FileSelectPanel from "../../../../components/file_select_panel";
 import { Button, Popconfirm, message } from "antd";
 import {
     PlusOutlined,
     DeleteOutlined
 } from '@ant-design/icons';
-import FileList from "./file_list";
+import FileList from "../../../../components/file_list";
 
 
 export default function TaskEdit({ taskInfo, onEdit, onDelete }) {
