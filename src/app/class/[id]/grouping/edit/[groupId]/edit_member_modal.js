@@ -106,7 +106,7 @@ export default function EditMemberModal({
                         label="Git 账号"
                         name="git_account"
                         placeholder="请输入 Git 账号，一行一个，用于交付时分析工作量"
-                        tooltip="Git 账号通常为各个成员在代码托管平台上的用户名，例如GitHub的用户名、GitLab的用户名等；若有多个账号，请一行一个。"
+                        tooltip="Git 账号通常为各个成员在代码托管平台上的邮箱，例如GitHub的邮箱、GitLab的邮箱等；若有多个账号，请一行一个。"
                     />
                 </ProForm>
             </div>

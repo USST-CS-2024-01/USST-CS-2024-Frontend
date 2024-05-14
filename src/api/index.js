@@ -6,6 +6,7 @@ import * as file from './file';
 import * as clazz from './clazz';
 import * as task from './task';
 import * as group from './group';
+import * as repo_record from './repo_record';
 
 export {
     auth,
@@ -15,5 +16,6 @@ export {
     file,
     clazz,
     task,
-    group
+    group,
+    repo_record
 }

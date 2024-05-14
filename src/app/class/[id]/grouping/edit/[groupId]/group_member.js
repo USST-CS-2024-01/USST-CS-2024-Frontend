@@ -16,6 +16,7 @@ import { getUser } from "@/store/session"
 import useSWR from "swr"
 import UserSelectModal from "@/components/class_member_select_modal"
 import EditMemberModal from "./edit_member_modal"
+import CryptoJS from 'crypto-js'
 
 export default function GroupMemberList({ classId, groupId }) {
     const actionRef = useRef();
@@ -182,13 +183,19 @@ export default function GroupMemberList({ classId, groupId }) {
                 return <div className='flex items-center'>
                     <Avatar.Group maxCount={2}>
                         {
-                            usernames?.map((username, index) => (
-                                <Tooltip title={username} key={index}>
-                                    <Avatar key={index} size={32} style={{ backgroundColor: getColor(username) }}>
+                            usernames?.map((username, index) => {
+                                const username_sha256 = CryptoJS.SHA256(username).toString()
+                                return <Tooltip title={username} key={index}>
+                                    <Avatar
+                                        key={index}
+                                        size={32}
+                                        style={{ backgroundColor: getColor(username) }}
+                                        src={`https://gravatar.bzpl.tech/${username_sha256}?d=identicon`}
+                                    >
                                         {username[0].toUpperCase()}
                                     </Avatar>
                                 </Tooltip>
-                            ))
+                            })
                         }
                     </Avatar.Group>
                 </div>

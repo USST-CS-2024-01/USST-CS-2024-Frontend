@@ -54,3 +54,18 @@ export async function checkTaskCanDelivery(classId, groupId, taskId) {
     const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/check`)
     return data;
 }
+
+export async function getTaskDeliveryList(classId, groupId, taskId) {
+    const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/list`)
+    return data;
+}
+
+export async function addTaskDeliveryDraftItem(classId, groupId, taskId, data) {
+    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/draft/item`, data)
+    return delivery?.data;
+}
+
+export async function deleteTaskDeliveryDraftItem(classId, groupId, taskId, itemId) {
+    const delivery = await del(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/draft/item/${itemId}`)
+    return delivery?.data;
+}
