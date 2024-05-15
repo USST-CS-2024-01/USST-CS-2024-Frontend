@@ -117,7 +117,7 @@ export default function TaskGroupMemberScore({ classId, groupId, task, me }) {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-0.5 ml-5">
+                            <div className="flex items-center gap-0.5 ml-5 flex-wrap">
                                 {member?.roles?.map((role) => {
                                     return <span key={role.id}>
                                         <Tooltip title={role?.role_description}>

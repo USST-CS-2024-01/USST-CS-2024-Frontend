@@ -18,9 +18,9 @@ import {
     renderFileIcon
 } from "@/util/file";
 import GitSelectionModal from "./git_selection_modal";
-import GitStatModal from "./git_stat_modal";
+import GitStatModal from "@/components/git_stat_modal";
 import FileSelectPanel from "@/components/file_select_panel";
-import MeetingRecordTable from "./meeting_record_table";
+import MeetingRecordTable from "@/components/meeting_record_table";
 import { ProForm, ProFormCheckbox, ProFormRadio, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
 
 
@@ -43,9 +43,19 @@ const STAGE_MAP = {
 export default function TaskDelivery({ classId, groupId, task, me }) {
     const [isManager, setIsManager] = useState(false)
     const [isSubmitter, setIsSubmitter] = useState(false)
-    const { data: canDeliver, error: cantDeliverError, isLoading: cantDeliverLoading } = useSWR('task-delivery-can-deliver', async () => {
-        const data = await taskApi.checkTaskCanDelivery(classId, groupId, task.id)
-        return data
+    const { data: deliverStatus } = useSWR('task-delivery-can-deliver', async () => {
+        try {
+            const data = await taskApi.checkTaskCanDelivery(classId, groupId, task.id)
+            return {
+                canDeliver: true,
+                error: null
+            }
+        } catch (e) {
+            return {
+                canDeliver: false,
+                error: e
+            }
+        }
     })
     const [refreshKey, setRefreshKey] = useState(`delivery-${Date.now()}`)
     const { data: deliveryList, error, isLoading } = useSWR(refreshKey, async () => {
@@ -110,23 +120,23 @@ export default function TaskDelivery({ classId, groupId, task, me }) {
                 }}
                 type="primary"
                 icon={<EditOutlined />}
-                disabled={deliveryList?.some(delivery => delivery?.delivery_status === 'draft') || !isSubmitter}
+                disabled={!isSubmitter}
             >
                 新建草稿
             </Button>
         </div>
 
         {selectedDelivery?.delivery_status === 'draft' && <div className="p-5 pb-0">
-            {(canDeliver && !cantDeliverError) && <Alert
+            {(deliverStatus && deliverStatus.canDeliver) && <Alert
                 showIcon
                 type="success"
                 message="当前可以交付任务"
             />}
-            {(cantDeliverError && !canDeliver) && <Alert
+            {(deliverStatus && !deliverStatus.canDeliver) && <Alert
                 showIcon
                 type="error"
                 message="当前无法交付任务"
-                description={cantDeliverError?.message}
+                description={deliverStatus?.error}
             />}
         </div>}
 

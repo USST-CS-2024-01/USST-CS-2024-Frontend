@@ -20,7 +20,8 @@ import {
     CarryOutTwoTone,
     BookTwoTone,
     FolderOpenTwoTone,
-    PhoneTwoTone
+    PhoneTwoTone,
+    BuildOutlined
 } from '@ant-design/icons';
 
 export const CLASS_MENU = [
@@ -44,6 +45,22 @@ export const CLASS_MENU = [
         icon: <FormOutlined />,
         href: '/class/{id}/task',
         roles: ['teacher', 'admin']
+    },
+    {
+        key: 'task_delivery',
+        label: '小组交付',
+        icon: <BuildOutlined />,
+        href: '/class/{id}/task_delivery',
+        roles: ['teacher', 'admin'],
+        children: [
+            {
+                key: 'task_grade',
+                label: '批改',
+                href: '/class/{id}/task_delivery/{taskId}/grade',
+                hidden: true,
+                roles: ['teacher', 'admin']
+            },
+        ]
     },
     {
         key: 'file',

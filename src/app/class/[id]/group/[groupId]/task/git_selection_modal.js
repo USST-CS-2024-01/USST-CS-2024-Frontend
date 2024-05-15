@@ -13,7 +13,7 @@ import {
 import { ProTable } from "@ant-design/pro-components"
 import { repo_record } from "@/api"
 import Link from "next/link"
-import GitStatModal from "./git_stat_modal"
+import GitStatModal from "@/components/git_stat_modal"
 
 export default function GitSelectionModal({ classId, groupId, onSelect, children }) {
     const [isModalOpen, setIsModalOpen] = useState(false)

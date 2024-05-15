@@ -5,6 +5,11 @@ export async function getClassTaskList(classId) {
     return data;
 }
 
+export async function getClassTaskChain(classId) {
+    const data = await get(`/class/${classId}/task_chain`);
+    return data;
+}
+
 export async function getClassTask(classId, taskId) {
     const data = await get(`/class/${classId}/task/${taskId}`);
     return data?.data;
@@ -80,12 +85,35 @@ export async function createTaskDeliveryDraft(classId, groupId, taskId) {
     return delivery?.data;
 }
 
-export async function approveTaskDeliveryAudit(classId, groupId, taskId) {
-    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/review/approve`, {})
+export async function approveTaskDeliveryAudit(classId, groupId, taskId, score) {
+    const payload = {};
+    if (score) {
+        payload.score = score
+    }
+    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/review/approve`, payload);
     return delivery?.data;
 }
 
 export async function rejectTaskDeliveryAudit(classId, groupId, taskId, delivery_comments) {
     const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/review/reject`, { delivery_comments })
     return delivery?.data;
+}
+
+export async function getTaskLatestDelivery(classId, taskId) {
+    const data = await get(`/class/${classId}/task/${taskId}/delivery/latest`)
+    return data;
+}
+
+export async function scoreTaskForGroupMember(classId, groupId, taskId, userId, score) {
+    const data = await post(`/class/${classId}/group/${groupId}/task/${taskId}/score`, {
+        user_id: userId,
+        score,
+        score_details: {}
+    })
+    return data;
+}
+
+export async function getScoreDetailOfTaskForGroupMember(classId, groupId, taskId) {
+    const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/score`)
+    return data;
 }
