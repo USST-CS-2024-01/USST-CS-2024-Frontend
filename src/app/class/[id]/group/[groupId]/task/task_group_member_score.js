@@ -78,7 +78,7 @@ export default function TaskGroupMemberScore({ classId, groupId, task, me }) {
     useEffect(() => {
         if (finishedMembers) {
             setClassMembers((members) => {
-                return members.map((item) => {
+                return members?.map((item) => {
                     const finished = finishedMembers.find((member) => member === item.user_id)
                     if (finished) {
                         item.finished = true

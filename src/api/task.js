@@ -69,3 +69,23 @@ export async function deleteTaskDeliveryDraftItem(classId, groupId, taskId, item
     const delivery = await del(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/draft/item/${itemId}`)
     return delivery?.data;
 }
+
+export async function submitTaskDeliveryDraft(classId, groupId, taskId) {
+    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/draft/submit`)
+    return delivery?.data;
+}
+
+export async function createTaskDeliveryDraft(classId, groupId, taskId) {
+    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/draft`, {})
+    return delivery?.data;
+}
+
+export async function approveTaskDeliveryAudit(classId, groupId, taskId) {
+    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/review/approve`, {})
+    return delivery?.data;
+}
+
+export async function rejectTaskDeliveryAudit(classId, groupId, taskId, delivery_comments) {
+    const delivery = await post(`/class/${classId}/group/${groupId}/task/${taskId}/delivery/review/reject`, { delivery_comments })
+    return delivery?.data;
+}
