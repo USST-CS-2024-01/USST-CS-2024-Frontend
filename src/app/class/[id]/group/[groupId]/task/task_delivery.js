@@ -53,7 +53,7 @@ export default function TaskDelivery({ classId, groupId, task, me }) {
         } catch (e) {
             return {
                 canDeliver: false,
-                error: e
+                error: e?.message || '未知错误'
             }
         }
     })
