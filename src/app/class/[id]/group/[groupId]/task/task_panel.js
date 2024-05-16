@@ -7,12 +7,17 @@ import {
     UploadOutlined
 } from "@ant-design/icons";
 import TaskBasicInfo from "./task_basic_info";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskGroupMemberScore from "./task_group_member_score";
 import TaskDelivery from "./task_delivery";
 
 export default function TaskPanel({ classId, groupId, task, me }) {
     const [segment, setSegment] = useState('description')
+
+    useEffect(() => {
+        if (!task) return;
+        setSegment('description')
+    }, [task])
 
     return <div>
         <h1 className="text-xl font-bold pb-3">

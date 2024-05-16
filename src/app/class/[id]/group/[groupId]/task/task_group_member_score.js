@@ -78,7 +78,7 @@ export default function TaskGroupMemberScore({ classId, groupId, task, me }) {
     useEffect(() => {
         if (finishedMembers) {
             setClassMembers((members) => {
-                return members.map((item) => {
+                return members?.map((item) => {
                     const finished = finishedMembers.find((member) => member === item.user_id)
                     if (finished) {
                         item.finished = true
@@ -117,7 +117,7 @@ export default function TaskGroupMemberScore({ classId, groupId, task, me }) {
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-0.5 ml-5">
+                            <div className="flex items-center gap-0.5 ml-5 flex-wrap">
                                 {member?.roles?.map((role) => {
                                     return <span key={role.id}>
                                         <Tooltip title={role?.role_description}>

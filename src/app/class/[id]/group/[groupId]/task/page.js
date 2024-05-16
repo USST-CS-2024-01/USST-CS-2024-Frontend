@@ -42,6 +42,7 @@ export default function GroupTaskDeliveryPage({ params }) {
                     return <div
                         className={`mb-3 bg-white flex flex-col w-64 px-2 hover:shadow-md transition duration-300 ease-in-out cursor-pointer ${selectedTask?.id === task?.id ? 'border border-blue-500' : ''}`}
                         key={task?.id}
+                        onClick={() => setSelectedTask(task)}
                     >
                         <div className="p-2 font-bold border-b flex items-center pl-0">
                             <span className="ml-2 truncate">#{index + 1} {task?.name}</span>
