@@ -172,12 +172,12 @@ export default function TaskEdit({ taskInfo, onEdit, onDelete }) {
                     </div>
                 </ProForm.Item>
                 <ProForm.Item
-                    label="附件"
-                    name="attached_files"
-                    tooltip="任务的附件，支持上传文件，上传的附件将保存至班级空间。"
-                >
-                    <div className="flex flex-col gap-2">
-                        <FileSelectPanel condition={{
+                            label="附件"
+                            name="attached_files"
+                            tooltip="任务的附件，支持上传文件，上传的附件将保存至班级空间。"
+                        >
+                            <div className="flex flex-col gap-2">
+                                <FileSelectPanel condition={{
                             class_id: taskInfo.class_id,
                         }} onFileSelect={(files) => {
                             // 将选中的文件并入附件列表，若文件已存在则忽略

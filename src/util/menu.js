@@ -21,6 +21,7 @@ import {
     BookTwoTone,
     FolderOpenTwoTone,
     PhoneTwoTone,
+    SoundOutlined,
     BuildOutlined
 } from '@ant-design/icons';
 
@@ -31,6 +32,12 @@ export const CLASS_MENU = [
         icon: <CarryOutOutlined />,
         href: '/class/{id}',
         roles: ['teacher', 'admin']
+    },
+    {
+        key: 'announcement',
+        label: '班级公告',
+        icon: <SoundOutlined />,
+        href: '/class/{id}/announcement',
     },
     {
         key: 'role',

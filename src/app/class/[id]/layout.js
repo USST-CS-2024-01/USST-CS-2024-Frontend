@@ -1,33 +1,41 @@
 "use client"
 
-import { Avatar, Button, Dropdown, Layout, Menu } from "antd";
+import {Avatar, Badge, Button, Dropdown, Layout, Menu} from "antd";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { user, clazz } from "@/api/index";
-import { LeftOutlined, LogoutOutlined, HomeOutlined } from "@ant-design/icons";
-import { useRouter } from 'next-nprogress-bar';
-import { getAvatar } from "@/store/avatar";
-import { getSelectedKeys, getOpenKeys, getMenuItems, getRedirectPath, hasAccess, CLASS_MENU } from "@/util/menu";
-import { logout } from "@/store/session";
+import {useEffect, useState} from "react";
+import {user, clazz} from "@/api/index";
+import {LeftOutlined, LogoutOutlined, HomeOutlined} from "@ant-design/icons";
+import {useRouter} from 'next-nprogress-bar';
+import {getAvatar} from "@/store/avatar";
+import {getSelectedKeys, getOpenKeys, getMenuItems, getRedirectPath, hasAccess, CLASS_MENU} from "@/util/menu";
+import {getUnReadTotal} from "@/api/announcement";
+import {logout} from "@/store/session";
+import {BellOutlined} from "@ant-design/icons";
 import useSWR from "swr";
 
-const { Header, Sider, Content } = Layout;
+const {Header, Sider, Content} = Layout;
 const window = globalThis;
 
-const RootLayout = ({ params, children }) => {
+const RootLayout = ({params, children}) => {
     const [collapsed, setCollapsed] = useState(true);
-    const [me, setMe] = useState({ name: 'username' });
+    const [me, setMe] = useState({name: 'username'});
     const router = useRouter();
     const [route, setRoute] = useState(globalThis?.__incrementalCache?.requestHeaders?.['x-invoke-path']);
     const [avatar, setAvatar] = useState();
 
-    const { id } = params;
+    const {id} = params;
     const [refreshKey, setRefreshKey] = useState(Date.now());
-    const { data: classInfo, error, isLoading } = useSWR(refreshKey, () => clazz.getClass(id))
+    const {data: classInfo, error, isLoading} = useSWR(refreshKey, () => clazz.getClass(id))
+    const {
+        data: announcementList,
+        error: announcementError,
+        isLoading: announcementLoading
+    } = useSWR(`announcement_${refreshKey}`, () => getUnReadTotal());
 
     const [selectedKeys, setSelectedKeys] = useState([]);
     const [openKeys, setOpenKeys] = useState([]);
     const [menuItem, setMenuItem] = useState([]);
+    const unReadCount = announcementList?.total || 0;
 
     useEffect(() => {
         setRoute(window.location.pathname);
@@ -60,7 +68,7 @@ const RootLayout = ({ params, children }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            if (route != window.location.pathname) {
+            if (route !== window.location.pathname) {
                 setRoute(window.location.pathname);
                 clearInterval(interval);
             }
@@ -77,7 +85,7 @@ const RootLayout = ({ params, children }) => {
         {
             label: '返回首页',
             key: 'back_home',
-            icon: <HomeOutlined />,
+            icon: <HomeOutlined/>,
             onClick: () => {
                 router.push('/manage');
             }
@@ -88,7 +96,7 @@ const RootLayout = ({ params, children }) => {
         {
             label: '退出登录',
             key: 'logout',
-            icon: <LogoutOutlined />,
+            icon: <LogoutOutlined/>,
             onClick: () => {
                 logout();
             },
@@ -109,28 +117,45 @@ const RootLayout = ({ params, children }) => {
             }} className="flex items-center justify-between shadow">
                 <div className="flex items-center ml-5 ">
                     <Button
-                        icon={<LeftOutlined />}
+                        icon={<LeftOutlined/>}
                         type="text"
                         onClick={() => router.push('/manage/class/my_class')}
                     />
-                    <Image src="/icon.png" alt="Logo" width={50} height={50} className="ml-8" />
+                    <Image src="/icon.png" alt="Logo" width={50} height={50} className="ml-8"/>
                     <h2 className="text-base ml-1">{classInfo?.name || "ClassName"}</h2>
                 </div>
 
-                <Menu style={{
-                    border: "none",
-                }} selectedKeys={[]} items={[
-                    {
-                        key: 'user',
-                        label: (<Dropdown menu={{ items: userDropdown }}>
-                            <div className="flex items-center gap-2 h-full">
-                                <Avatar src={avatar}>{me?.name[0].toUpperCase()}</Avatar>
-                                <span className="text-base">{me?.name}</span>
-                            </div>
-                        </Dropdown>)
-                    }
-                ]}>
-                </Menu>
+                <div className="flex items-center">
+                    <Menu style={{
+                        border: 'none',
+                    }} selectedKeys={[]} items={[
+                        {
+                            key: 'user',
+                            label: (
+                                <Dropdown menu={{items: userDropdown}}>
+                                    <div className="flex items-center gap-2 h-full">
+                                        <Avatar src={avatar}>{me?.name[0].toUpperCase()}</Avatar>
+                                        <span className="text-base">{me?.name}</span>
+                                    </div>
+                                </Dropdown>)
+                        }
+                    ]}>
+                    </Menu>
+                    <Badge
+                        count={unReadCount}
+                        size={'small'}
+                        overflowCount={99}
+                    >
+                        <Button
+                            icon={<BellOutlined/>}
+                            type="text"
+                            size={'middle'}
+                            onClick={() => router.push(`/class/${id}/announcement`)}
+                        >
+                        </Button>
+                    </Badge>
+                </div>
+
             </Header>
             <Layout style={{
                 backgroundColor: 'transparent',
@@ -145,13 +170,13 @@ const RootLayout = ({ params, children }) => {
                         items={menuItem}
                         selectedKeys={selectedKeys}
                         defaultOpenKeys={openKeys}
-                        onSelect={({ key }) => {
+                        onSelect={({key}) => {
                             setSelectedKeys([key]);
                         }}
                         style={{
                             marginTop: '10px'
                         }}
-                        onClick={({ key }) => {
+                        onClick={({key}) => {
                             router.push(getRedirectPath(me, CLASS_MENU, key, id));
                         }}
                     />
