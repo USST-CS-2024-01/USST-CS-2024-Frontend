@@ -21,7 +21,7 @@ import {
     BookTwoTone,
     FolderOpenTwoTone,
     PhoneTwoTone,
-    SoundOutlined,
+    NotificationOutlined,
     BuildOutlined
 } from '@ant-design/icons';
 
@@ -36,7 +36,7 @@ export const CLASS_MENU = [
     {
         key: 'announcement',
         label: '班级公告',
-        icon: <SoundOutlined />,
+        icon: <NotificationOutlined />,
         href: '/class/{id}/announcement',
     },
     {
