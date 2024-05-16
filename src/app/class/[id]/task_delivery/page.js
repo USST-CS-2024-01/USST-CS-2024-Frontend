@@ -125,7 +125,7 @@ export default function TaskDeliveryManage({ params }) {
             监控各个小组进度，批改与审核小组交付。
         </div>
 
-        <div className="flex mt-5">
+        <div className="flex mt-5 max-w-[1200px]">
             <ProTable
                 className="mt-5"
                 columns={TASK_COLUMNS}

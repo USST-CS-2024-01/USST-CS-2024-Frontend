@@ -95,9 +95,28 @@ export default function TaskDeliveryManage({ params }) {
 
         <div className="flex mt-5 gap-5">
             <div className="bg-white p-5 rounded w-[400px]">
-                <h2 className="text-lg font-bold mb-5">
-                    {taskInfo?.name}
-                </h2>
+                <div className="flex items-center gap-2 justify-between mb-2">
+                    <h2 className="text-lg font-bold">
+                        {taskInfo?.name}
+                    </h2>
+                    <div>
+                        <Button
+                            type='dashed'
+                            icon={<EditOutlined />}
+                            onClick={() => router.push(`/class/${classId}/task`)}
+                        >
+                            编辑
+                        </Button>
+                    </div>
+                </div>
+                <div>
+                    <span>截止时间：</span>
+                    <span>{taskInfo?.deadline ? timestampToTime(taskInfo.deadline * 1000) : '未设置'}</span>
+                </div>
+                <div className="mb-3">
+                    <span>成绩占比：</span>
+                    <span>{taskInfo?.grade_percentage?.toFixed(2)}%</span>
+                </div>
 
                 <Select
                     placeholder="选择小组"
@@ -130,7 +149,7 @@ export default function TaskDeliveryManage({ params }) {
                             setSelectGroup(groupList[index - 1])
                             setSelectDelivery(null)
                         }}
-                    >上一个</Button>
+                    >上一组</Button>
 
                     <Button
                         type='dashed'
@@ -141,7 +160,7 @@ export default function TaskDeliveryManage({ params }) {
                             setSelectDelivery(null)
                         }}
 
-                    >下一个</Button>
+                    >下一组</Button>
                 </div>
 
                 {selectGroup && <>

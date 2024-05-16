@@ -12,7 +12,8 @@ import {
     FileAddOutlined,
     GithubOutlined,
     BarChartOutlined,
-    ToTopOutlined
+    ToTopOutlined,
+    OpenAIOutlined
 } from "@ant-design/icons";
 import {
     renderFileIcon
@@ -21,6 +22,7 @@ import GitStatModal from "@/components/git_stat_modal";
 import { ProForm, ProFormCheckbox, ProFormDigit, ProFormRadio, ProFormText, ProFormTextArea } from "@ant-design/pro-components";
 import MeetingRecordTable from "@/components/meeting_record_table";
 import { comment } from "postcss";
+import AiEvaluationModal from "@/components/ai_evaluation_modal";
 
 
 function extractOriginalFileName(fileName) {
@@ -147,18 +149,28 @@ export default function DeliveryDetail({ classId, groupId, delivery, task, taskI
                                     {bytesToSize(item?.file?.file_size)}
                                 </div>
                             </div>
-                            <div>
-                                {item?.file?.file_type === 'document' && <Button
-                                    onClick={() => {
-                                        fileApi.getOnlineEditLink(item?.file?.id).then((url) => {
-                                            if (url) {
-                                                window.open(url)
-                                            }
-                                        })
-                                    }}
-                                    type="link"
-                                    icon={<CloudSyncOutlined />}
-                                />}
+                            <div className="flex">
+                                {item?.file?.file_type === 'document' && <div className="flex">
+                                    <AiEvaluationModal
+                                        fileId={item?.file?.id}
+                                    >
+                                        <Button
+                                            type="link"
+                                            icon={<OpenAIOutlined />}
+                                        />
+                                    </AiEvaluationModal>
+                                    <Button
+                                        onClick={() => {
+                                            fileApi.getOnlineEditLink(item?.file?.id).then((url) => {
+                                                if (url) {
+                                                    window.open(url)
+                                                }
+                                            })
+                                        }}
+                                        type="link"
+                                        icon={<CloudSyncOutlined />}
+                                    />
+                                </div>}
                                 <Button
                                     onClick={() => {
                                         fileApi.downloadFile(item?.file?.id).then((url) => {
