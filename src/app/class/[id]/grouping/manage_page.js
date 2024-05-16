@@ -36,7 +36,6 @@ export default function GroupManagePage({ params }) {
     }, [router, id])
 
     useEffect(() => {
-        console.log('classMember: ', classMember);
         if (!classMember) {
             return;
         }
@@ -73,6 +72,7 @@ export default function GroupManagePage({ params }) {
             width: 180,
             render: (text, record) => {
                 let leader = null;
+                console.log('record:',record)
                 if (record.members) {
                     leader = record.members.find((item) => item.roles.find((role) => role.is_manager))
                 }

@@ -362,6 +362,7 @@ export default function ClassFileList({ params }) {
                 rowSelection={rowSelection}
                 request={async (params, sort, filter) => {
                     params.class_id = id;
+                    console.log('Params: ', params);
                     return await file.getFileList(params, sort, filter);
                 }}
                 editable={false}
