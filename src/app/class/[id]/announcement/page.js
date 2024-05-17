@@ -34,7 +34,6 @@ export default function ClassAnnouncementList({params}) {
     const [activeKey, setActiveKey] = useState('unread');
     const actionRef = useRef();
     const {data: me} = useSWR('me', getUser);
-    const {confirm} = Modal;
     const {id} = params;
     const {data: classData} = useSWR(`class-announcement-${id}`, () => clazz.getClass(id));
     const [form] = ProForm.useForm();

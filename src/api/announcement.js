@@ -1,7 +1,7 @@
 import {get, post, put, del} from './request';
 
 //http://192.168.19.2:9999/api/v1/announcement/list?status=unread
-export async function getAnnouncementList(params, sort, filter) {
+export async function getAnnouncementList(params, sort) {
     params.page = params.current;
     params.page_size = params.pageSize;
 
