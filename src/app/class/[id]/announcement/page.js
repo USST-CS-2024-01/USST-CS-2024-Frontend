@@ -1,15 +1,15 @@
 "use client"
-import {Breadcrumb, Button, Modal, Popconfirm, Tag, Tooltip, message, Typography} from 'antd';
+import {Breadcrumb, Button, Modal, Popconfirm, Tag, Tooltip, message, Typography, Card} from 'antd';
 import {useEffect, useState, useRef, useCallback} from 'react';
 import {ProForm, ProFormText, ProFormTextArea, ProTable} from '@ant-design/pro-components';
 import {CLASS_MENU, getBreadcrumbItems} from '@/util/menu';
 import {useRouter} from 'next-nprogress-bar';
-import {ZoomInOutlined, EditOutlined, DeleteOutlined, PlusOutlined} from '@ant-design/icons';
+import {HistoryOutlined, EditOutlined, DeleteOutlined, PlusOutlined} from '@ant-design/icons';
 import useSWR from 'swr';
 import {getUser} from '@/store/session';
 import {
     createAnnouncement,
-    deleteAnnouncement,
+    deleteAnnouncement, getAnnouncementInfo,
     getAnnouncementList,
     setReadAnnouncement,
     updateAnnouncement
@@ -17,7 +17,7 @@ import {
 import UserAvatar from "@/components/avatar";
 import FileSelectPanel from "@/components/file_select_panel";
 import FileList from "@/components/file_list";
-import Link from "next/link";
+import {clazz} from "@/api";
 
 const {Title, Paragraph} = Typography;
 
@@ -28,6 +28,7 @@ export default function ClassAnnouncementList({params}) {
     const [attachment, setAttachment] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+    const [isReadStatusModalOpen, setIsReadStatusModalOpen] = useState(false);
     const [announcementId, setAnnouncementId] = useState(null);
     const [announcementData, setAnnouncementData] = useState({});
     const [activeKey, setActiveKey] = useState('unread');
@@ -35,6 +36,7 @@ export default function ClassAnnouncementList({params}) {
     const {data: me} = useSWR('me', getUser);
     const {confirm} = Modal;
     const {id} = params;
+    const {data: classData} = useSWR(`class-announcement-${id}`, () => clazz.getClass(id));
     const [form] = ProForm.useForm();
 
     useEffect(() => {
@@ -54,8 +56,9 @@ export default function ClassAnnouncementList({params}) {
                     <a
                         className={"text-blue-500 hover:underline"}
                         href="#"
-                        onClick={() => {
-                            setAnnouncementData(record);
+                        onClick={async () => {
+                            const data = await getAnnouncementInfo(record.id);
+                            setAnnouncementData(data?.data);
                             setIsViewModalOpen(true);
                         }}>
                         {record?.title}
@@ -106,6 +109,21 @@ export default function ClassAnnouncementList({params}) {
             render: (text, record) => (
                 me?.user_type !== 'student' && (
                     <div className="flex gap-2 content-end justify-end">
+                        <Tooltip title={'查看已读状态'} key={'read-status'}>
+                            <Button
+                                icon={<HistoryOutlined/>}
+                                type={"text"}
+                                onClick={
+                                    async () => {
+                                        const data = await getAnnouncementInfo(record.id);
+                                        setAnnouncementData(data?.data);
+                                        setIsReadStatusModalOpen(true);
+                                        console.log("classData", classData);
+                                    }}
+                                disabled={me?.user_type === 'student'}
+                            >
+                            </Button>
+                        </Tooltip>
                         <Tooltip title={'编辑公告'} key={'edit'}>
                             <Button
                                 icon={<EditOutlined/>}
@@ -290,6 +308,53 @@ export default function ClassAnnouncementList({params}) {
                 )}
             </Modal>
 
+            <Modal
+                title={`查看已读状态 - ${announcementData.title}`}
+                centered
+                open={isReadStatusModalOpen}
+                onCancel={() => setIsReadStatusModalOpen(false)}
+                footer={[
+                    <Button key="close" onClick={() => setIsReadStatusModalOpen(false)}>
+                        关闭
+                    </Button>
+                ]}
+            >
+                <div className="bg-white mt-3 mb-10">
+                    <h5 className="text-lg font-semibold mb-2 text-gray-700">已读</h5>
+                    <div className="flex flex-wrap gap-2.5">
+                        {announcementData.read_users?.map(user => (
+                            <Card key={user.id} className="flex-grow-0 flex-shrink-0 w-56" bordered={false} hoverable
+                                  size={"small"}>
+                                <div className="flex items-center">
+                                    <UserAvatar user={user}/>
+                                    <div className='flex flex-col ml-2'>
+                                        <span className="font-medium">{user.name}</span>
+                                        <span className='text-xs text-gray-500'>{user?.employee_id}</span>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                    <h5 className="text-lg font-semibold mt-4 mb-2 text-gray-700">未读</h5>
+                    <div className="flex flex-wrap gap-2.5">
+                        {classData?.stu_list?.filter(student => !announcementData.read_users?.some(user => user.id === student.id)).map(user => (
+                            <Card key={user.id} className="flex-grow-0 flex-shrink-0 w-56" bordered={false} hoverable
+                                  size={"small"}>
+                                <div className="flex items-center">
+                                    <UserAvatar user={user}/>
+                                    <div className='flex flex-col ml-2'>
+                                        <span className="font-medium">{user.name}</span>
+                                        <span className='text-xs text-gray-500'>{user?.employee_id}</span>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+
+
+            </Modal>
+
             <ProTable
                 className="mt-5"
                 columns={ANNOUNCEMENT_COLUMNS}
@@ -335,10 +400,6 @@ export default function ClassAnnouncementList({params}) {
                         type: 'tab',
                         activeKey: activeKey,
                         items: [
-                            // {
-                            //     key: 'all',
-                            //     label: '全部公告',
-                            // },
                             {
                                 key: 'unread',
                                 label: '未读公告',

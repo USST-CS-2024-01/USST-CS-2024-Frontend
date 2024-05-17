@@ -60,3 +60,8 @@ export async function setReadAnnouncement(id) {
     const data = await post(`/announcement/${id}/read`);
     return data;
 }
+
+export async function getAnnouncementInfo(id) {
+    const data = await get(`/announcement/${id}`);
+    return data;
+}
