@@ -1,12 +1,12 @@
 "use client"
-import {Breadcrumb, Button, Modal, Popconfirm, Tag, Tooltip, message, Typography, Card} from 'antd';
-import {useEffect, useState, useRef, useCallback} from 'react';
-import {ProForm, ProFormText, ProFormTextArea, ProTable} from '@ant-design/pro-components';
-import {CLASS_MENU, getBreadcrumbItems} from '@/util/menu';
-import {useRouter} from 'next-nprogress-bar';
-import {HistoryOutlined, EditOutlined, DeleteOutlined, PlusOutlined} from '@ant-design/icons';
+import { Breadcrumb, Button, Modal, Popconfirm, Tag, Tooltip, message, Typography, Card } from 'antd';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { ProForm, ProFormText, ProFormTextArea, ProTable } from '@ant-design/pro-components';
+import { CLASS_MENU, getBreadcrumbItems } from '@/util/menu';
+import { useRouter } from 'next-nprogress-bar';
+import { HistoryOutlined, EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import useSWR from 'swr';
-import {getUser} from '@/store/session';
+import { getUser } from '@/store/session';
 import {
     createAnnouncement,
     deleteAnnouncement, getAnnouncementInfo,
@@ -17,11 +17,11 @@ import {
 import UserAvatar from "@/components/avatar";
 import FileSelectPanel from "@/components/file_select_panel";
 import FileList from "@/components/file_list";
-import {clazz} from "@/api";
+import { clazz } from "@/api";
 
-const {Title, Paragraph} = Typography;
+const { Title, Paragraph } = Typography;
 
-export default function ClassAnnouncementList({params}) {
+export default function ClassAnnouncementList({ params }) {
     const [breadcrumb, setBreadcrumb] = useState([]);
     const router = useRouter();
     const [messageApi, contextHolder] = message.useMessage();
@@ -33,9 +33,9 @@ export default function ClassAnnouncementList({params}) {
     const [announcementData, setAnnouncementData] = useState({});
     const [activeKey, setActiveKey] = useState('unread');
     const actionRef = useRef();
-    const {data: me} = useSWR('me', getUser);
-    const {id} = params;
-    const {data: classData} = useSWR(`class-announcement-${id}`, () => clazz.getClass(id));
+    const { data: me } = useSWR('me', getUser);
+    const { id } = params;
+    const { data: classData } = useSWR(`class-announcement-${id}`, () => clazz.getClass(id));
     const [form] = ProForm.useForm();
 
     useEffect(() => {
@@ -77,7 +77,7 @@ export default function ClassAnnouncementList({params}) {
 
                 return (
                     <div className='flex items-center'>
-                        <UserAvatar user={publisher}/>
+                        <UserAvatar user={publisher} />
                         <div className='flex flex-col'>
                             <span className='ml-2'>{publisher?.name}</span>
                         </div>
@@ -110,7 +110,7 @@ export default function ClassAnnouncementList({params}) {
                     <div className="flex gap-2 content-end justify-end">
                         <Tooltip title={'查看已读状态'} key={'read-status'}>
                             <Button
-                                icon={<HistoryOutlined/>}
+                                icon={<HistoryOutlined />}
                                 type={"text"}
                                 onClick={
                                     async () => {
@@ -125,7 +125,7 @@ export default function ClassAnnouncementList({params}) {
                         </Tooltip>
                         <Tooltip title={'编辑公告'} key={'edit'}>
                             <Button
-                                icon={<EditOutlined/>}
+                                icon={<EditOutlined />}
                                 type={"text"}
                                 onClick={() => {
                                     setAnnouncementId(record.id);
@@ -169,7 +169,7 @@ export default function ClassAnnouncementList({params}) {
                         >
                             <Tooltip title={'删除'}>
                                 <Button
-                                    icon={<DeleteOutlined/>}
+                                    icon={<DeleteOutlined />}
                                     type={"text"}
                                     danger
                                     disabled={me?.user_type === 'student'}
@@ -186,13 +186,17 @@ export default function ClassAnnouncementList({params}) {
     const onFinish = async (data) => {
         data.attachments = attachment.map(file => file.id);
 
-        if (announcementId) {
-            await updateAnnouncement(announcementId, data);
-        } else {
-            await createAnnouncement(Number(id), data);
+        try {
+            if (announcementId) {
+                await updateAnnouncement(announcementId, data);
+            } else {
+                await createAnnouncement(Number(id), data);
+            }
+            setIsModalOpen(false);
+            actionRef.current.reload();
+        } catch (e) {
+            message.error(e?.message || '操作失败');
         }
-        setIsModalOpen(false);
-        actionRef.current.reload();
     };
 
     const resetForm = useCallback(() => {
@@ -208,7 +212,7 @@ export default function ClassAnnouncementList({params}) {
 
     return (
         <div className={"p-10"}>
-            <Breadcrumb items={breadcrumb}/>
+            <Breadcrumb items={breadcrumb} />
             <h1 className={"text-2xl font-bold mt-2"}>班级公告</h1>
             {contextHolder}
 
@@ -225,20 +229,20 @@ export default function ClassAnnouncementList({params}) {
                 <ProForm
                     form={form}
                     onFinish={onFinish}
-                    initialValues={{title: '', content: ''}}
+                    initialValues={{ title: '', content: '' }}
                     submitter={false}
                 >
                     <ProFormText
                         name="title"
                         label="公告标题"
                         placeholder="请输入公告标题"
-                        rules={[{required: true, message: '请输入公告标题'}]}
+                        rules={[{ required: true, message: '请输入公告标题' }]}
                     />
                     <ProFormTextArea
                         name="content"
                         label="公告内容"
                         placeholder="请输入公告内容"
-                        rules={[{required: true, message: '请输入公告内容'}]}
+                        rules={[{ required: true, message: '请输入公告内容' }]}
                         fieldProps={{
                             rows: 5
                         }}
@@ -264,14 +268,14 @@ export default function ClassAnnouncementList({params}) {
                             }}>
                                 <Button
                                     type="primary"
-                                    icon={<PlusOutlined/>}
+                                    icon={<PlusOutlined />}
                                 >
                                     添加附件
                                 </Button>
                             </FileSelectPanel>
                             <FileList files={attachment} onChange={(files) => {
                                 setAttachment(files);
-                            }}/>
+                            }} />
                         </div>
                     </ProForm.Item>
                 </ProForm>
@@ -302,7 +306,7 @@ export default function ClassAnnouncementList({params}) {
                 {announcementData?.attachment?.length > 0 && (
                     <>
                         <h4 className="text-base font-semibold mb-2 text-gray-600">附件</h4>
-                        <FileList files={announcementData?.attachment || []} disabled/>
+                        <FileList files={announcementData?.attachment || []} disabled />
                     </>
                 )}
             </Modal>
@@ -323,9 +327,9 @@ export default function ClassAnnouncementList({params}) {
                     <div className="flex flex-wrap gap-2.5">
                         {announcementData.read_users?.map(user => (
                             <Card key={user.id} className="flex-grow-0 flex-shrink-0 w-56" bordered={false} hoverable
-                                  size={"small"}>
+                                size={"small"}>
                                 <div className="flex items-center">
-                                    <UserAvatar user={user}/>
+                                    <UserAvatar user={user} />
                                     <div className='flex flex-col ml-2'>
                                         <span className="font-medium">{user.name}</span>
                                         <span className='text-xs text-gray-500'>{user?.employee_id}</span>
@@ -338,9 +342,9 @@ export default function ClassAnnouncementList({params}) {
                     <div className="flex flex-wrap gap-2.5">
                         {classData?.stu_list?.filter(student => !announcementData.read_users?.some(user => user.id === student.id)).map(user => (
                             <Card key={user.id} className="flex-grow-0 flex-shrink-0 w-56" bordered={false} hoverable
-                                  size={"small"}>
+                                size={"small"}>
                                 <div className="flex items-center">
-                                    <UserAvatar user={user}/>
+                                    <UserAvatar user={user} />
                                     <div className='flex flex-col ml-2'>
                                         <span className="font-medium">{user.name}</span>
                                         <span className='text-xs text-gray-500'>{user?.employee_id}</span>
@@ -359,6 +363,7 @@ export default function ClassAnnouncementList({params}) {
                 columns={ANNOUNCEMENT_COLUMNS}
                 cardBordered
                 request={async (params, sort, filter) => {
+                    params.class_id = id;
                     const response = await getAnnouncementList(params, sort, filter);
                     return {
                         data: response.data.filter(announcement => {
@@ -378,7 +383,7 @@ export default function ClassAnnouncementList({params}) {
                     persistenceKey: 'scs:class:announcement-list-table',
                     persistenceType: 'localStorage',
                     defaultValue: {
-                        option: {fixed: 'right', disable: true},
+                        option: { fixed: 'right', disable: true },
                     },
                     onChange(value) {
                         console.log('value: ', value);
@@ -424,7 +429,7 @@ export default function ClassAnnouncementList({params}) {
                             setIsModalOpen(true);
                         }}
                         disabled={me?.user_type === 'student'}
-                        icon={<EditOutlined/>}
+                        icon={<EditOutlined />}
                     >
                         新建公告
                     </Button>
