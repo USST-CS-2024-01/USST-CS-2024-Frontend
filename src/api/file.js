@@ -134,3 +134,22 @@ export async function cancelUpload(sessionId) {
     const res = await del(`/file/upload/${sessionId}`);
     return res;
 }
+
+export async function createAiEvaluationTask(fileId) {
+    const res = await post(`/ai/document_evaluation/create`, {
+        file_id: fileId
+    });
+    return res;
+}
+
+
+export async function retryAiEvaluationTask(fileId) {
+    const res = await put(`/file/${fileId}/document_evaluation`);
+    return res;
+}
+
+export async function getAiEvaluationResult(fileId) {
+    const res = await get(`/file/${fileId}/document_evaluation`);
+    return res?.data;
+}
+
