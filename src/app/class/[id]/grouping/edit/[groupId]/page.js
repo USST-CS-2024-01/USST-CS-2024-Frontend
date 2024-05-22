@@ -60,6 +60,7 @@ export default function GroupEdit({ params }) {
         <div className={"max-w-[800px]"}>
             <Steps
                 current={currentStep}
+                status={currentStep === 3 ? 'finish' : 'process'}
                 items={[
                     {
                         title: '小组创建',

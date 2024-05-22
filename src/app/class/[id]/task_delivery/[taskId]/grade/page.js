@@ -189,6 +189,7 @@ export default function TaskDeliveryManage({ params }) {
                                                     setRefreshKey(`task-delivery-${classId}-${taskId}-${Date.now()}`)
                                                     setDeliveryRefreshKey(`task-delivery-${classId}-${taskId}-${Date.now()}`)
                                                     messageApi.success('操作成功')
+                                                    router.refresh()
                                                 } catch (e) {
                                                     messageApi.error(e?.message || '操作失败')
                                                 }
@@ -209,9 +210,12 @@ export default function TaskDeliveryManage({ params }) {
                                 >
                                     {STATUS_TAG_MAP[delivery.delivery_status]}
                                     <span>{timestampToTime(delivery.delivery_time * 1000)}</span>
-                                    {(taskInfo?.deadline && delivery.delivery_time > taskInfo.deadline) &&
-                                        <span className='text-red-500'>(逾期)</span>}
-                                    {delivery.delivery_status === 'teacher_approved' && <Tag color='purple'>
+                                    {
+                                        (taskInfo?.deadline && delivery.delivery_time > taskInfo.deadline)
+                                        ?
+                                        <span className='text-red-500'>(逾期)</span> : <></>
+                                    }
+                                    {(delivery.delivery_status === 'teacher_approved') && <Tag color='purple'>
                                         评分: {delivery.task_grade_percentage}
                                     </Tag>}
                                 </div>

@@ -89,6 +89,10 @@ export default function TaskDelivery({ classId, groupId, task, me }) {
 
     return <>
         {contextHolder}
+        {!isSubmitter && <div className="pb-5 px-2">
+            <Alert message="您不是该任务的负责人，请联系任务负责人提交" type="warning" showIcon />
+        </div>}
+
         <div className="flex justify-end gap-3">
             <Select options={
                 deliveryList?.map(delivery => ({

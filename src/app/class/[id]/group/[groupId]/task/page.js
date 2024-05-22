@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons"
 import { timestampToTime } from "@/util/string"
 import TaskPanel from "./task_panel"
+import TaskStatusBadge from "./task_status_badge"
 
 export default function GroupTaskDeliveryPage({ params }) {
     const { data: meMember } = useSWR('me-task', () => group.getMyGroupMember(id))
@@ -57,6 +58,13 @@ export default function GroupTaskDeliveryPage({ params }) {
                                     </Tooltip>
                                 </span>
                             }
+                            <div className="ml-2 font-normal">
+                                <TaskStatusBadge
+                                    classId={id}
+                                    groupId={groupId}
+                                    taskId={task.id}
+                                />
+                            </div>
                         </div>
                         <div className="pb-3">
                             <ul className="mt-2 text-sm text-gray-600 px-2">
