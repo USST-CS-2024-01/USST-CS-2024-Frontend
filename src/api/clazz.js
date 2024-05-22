@@ -100,3 +100,9 @@ export async function deleteRole(id, roleId) {
     return clazz?.data;
 }
 
+
+
+export async function switchToTeachingStage(id) {
+    const clazz = await post(`/class/${id}/task/start`);
+    return clazz?.data;
+}

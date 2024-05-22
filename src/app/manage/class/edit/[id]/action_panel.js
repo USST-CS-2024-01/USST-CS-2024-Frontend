@@ -1,6 +1,6 @@
 "use client"
 import { ProDescriptions } from "@ant-design/pro-components"
-import { message } from "antd"
+import { Modal, message } from "antd"
 import { useEffect, useState } from "react"
 import { clazz } from "@/api"
 import useSWR from "swr"
@@ -96,6 +96,51 @@ export default function ActionPanel({ id }) {
                                 content: error?.message || '启动失败'
                             })
                         }
+                    }}
+                />
+            </>}
+
+
+            {data?.status === 'grouping' && <>
+                <CardAction
+                    title={"开始授课"}
+                    danger
+                    description={<>
+                        将班级的状态切换至授课中，学生可以开始交付任务。<br />
+                        <b>请注意，启动后，所有的分组信息都将无法修改，且管理员无法添加成员至班级！</b><br />
+                        <b>该操作不可逆，请谨慎操作！</b>
+                    </>}
+                    buttonTitle={"启动"}
+                    onClick={async () => {
+                        Modal.confirm({
+                            title: '确认开始授课',
+                            content: '确认开始授课后，将无法修改组队信息，请确保已经完成组队工作！',
+                            danger: true,
+                            centered: true,
+                            okType: 'danger',
+                            onOk: async () => {
+                                messageApi.open({
+                                    key: 'update',
+                                    type: 'loading',
+                                    content: '正在启动...'
+                                })
+                                try {
+                                    await clazz.switchToTeachingStage(id);
+                                    messageApi.open({
+                                        key: 'update',
+                                        type: 'success',
+                                        content: '启动成功'
+                                    })
+                                    setRefreshKey(refreshKey + 1)
+                                } catch (error) {
+                                    messageApi.open({
+                                        key: 'update',
+                                        type: 'error',
+                                        content: error?.message || '启动失败'
+                                    })
+                                }
+                            }
+                        })
                     }}
                 />
             </>}

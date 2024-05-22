@@ -2,8 +2,6 @@ import JSZip from "jszip";
 import { clazz, task, group, file, repo_record } from "@/api";
 import { timestampToTime } from "./string";
 
-const zip = new JSZip();
-
 function deliveryFileNameToSimpleFileName(name) {
     // delivery_3_1715666654_978ebeb7-6397-4077-8420-94d8883972a3_第二次组会-会议纪要.docx
     // 第二次组会-会议纪要.docx
@@ -52,6 +50,7 @@ async function downloadTaskArchive(classId, groupId, taskId, deliveryId, c, pare
         // 交付物
         const deliveryItems = delivery?.delivery_items;
         const deliveryTime = timestampToTime(delivery?.delivery_time * 1000);
+        const zip = new JSZip();
         const folder = parentFolder || zip.folder(`${taskDetail.name}-${groupDetail.name}-${deliveryTime}`);
 
         for (const item of deliveryItems) {
@@ -115,6 +114,7 @@ export async function doSingleRecordArchive(classId, groupId, taskId, deliveryId
 }
 
 export async function doTaskRecordArchive(classId, taskId, callback) {
+    const zip = new JSZip();
     callback({
         status: 'downloading',
         message: '正在获取数据...',
