@@ -1,5 +1,5 @@
 "use client"
-import { Alert, Avatar, Breadcrumb, Button, Empty, Segmented, Select, Spin, Tag, Tooltip } from 'antd';
+import { Alert, Avatar, Breadcrumb, Button, Empty, Modal, Segmented, Select, Spin, Tag, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { CLASS_MENU, getBreadcrumbItems } from '@/util/menu';
 import { useRouter } from 'next-nprogress-bar';
@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import {
     CalendarOutlined,
     EditOutlined,
-    DownloadOutlined,
+    UnlockOutlined,
     LeftOutlined,
     RightOutlined
 } from '@ant-design/icons';
@@ -30,6 +30,7 @@ export default function TaskDeliveryManage({ params }) {
     const [breadcrumb, setBreadcrumb] = useState([]);
     const router = useRouter()
     const { id: classId, taskId } = params
+    const [messageApi, contextHolder] = message.useMessage();
 
     useEffect(() => {
         setBreadcrumb(getBreadcrumbItems(globalThis.location.pathname, CLASS_MENU, router, {
@@ -93,8 +94,10 @@ export default function TaskDeliveryManage({ params }) {
         <Breadcrumb items={breadcrumb} />
         <h1 className={"text-2xl font-bold mt-2"}>交付物批改</h1>
 
+        {contextHolder}
+
         <div className="flex mt-5 gap-5">
-            <div className="bg-white p-5 rounded w-[400px]">
+            <div className="bg-white p-5 rounded w-[450px]">
                 <div className="flex items-center gap-2 justify-between mb-2">
                     <h2 className="text-lg font-bold">
                         {taskInfo?.name}
@@ -165,7 +168,38 @@ export default function TaskDeliveryManage({ params }) {
 
                 {selectGroup && <>
                     <div className="mt-10">
-                        <h2 className="text-lg font-bold">交付记录</h2>
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-bold">交付记录</h2>
+                            {(
+                                selectGroup?.current_task_id == taskId &&
+                                canScore
+                            ) &&
+                                <Button
+                                    type='primary'
+                                    icon={<UnlockOutlined />}
+                                    className='float-right'
+                                    onClick={() => {
+                                        Modal.confirm({
+                                            centered: true,
+                                            title: '确认开放下一任务？',
+                                            content: '开放下一任务后，学生将可以查看下一任务的内容并提交，同时，该任务将无法被删除或修改顺序，是否确认开放下一任务？',
+                                            onOk: async () => {
+                                                try {
+                                                    await task.openNextTask(classId, selectGroup.id)
+                                                    setRefreshKey(`task-delivery-${classId}-${taskId}-${Date.now()}`)
+                                                    setDeliveryRefreshKey(`task-delivery-${classId}-${taskId}-${Date.now()}`)
+                                                    messageApi.success('操作成功')
+                                                } catch (e) {
+                                                    messageApi.error(e?.message || '操作失败')
+                                                }
+                                            }
+                                        })
+                                    }}
+                                >
+                                    开放下一任务
+                                </Button>
+                            }
+                        </div>
                         <div className="mt-5 flex flex-col border rounded h-[200px] overflow-y-auto gap-0.5">
                             {deliveryList?.length > 0 ? deliveryList.map((delivery) => {
                                 return <div

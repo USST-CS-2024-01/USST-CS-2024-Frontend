@@ -30,7 +30,7 @@ const RootLayout = ({params, children}) => {
         data: announcementList,
         error: announcementError,
         isLoading: announcementLoading
-    } = useSWR(`announcement_${refreshKey}`, () => getUnReadTotal());
+    } = useSWR(`announcement_${refreshKey}`, () => getUnReadTotal(id));
 
     const [selectedKeys, setSelectedKeys] = useState([]);
     const [openKeys, setOpenKeys] = useState([]);

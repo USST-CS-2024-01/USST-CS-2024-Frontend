@@ -9,7 +9,8 @@ import useSWR from 'swr';
 import { getUser } from '@/store/session';
 import {
     createAnnouncement,
-    deleteAnnouncement, getAnnouncementInfo,
+    deleteAnnouncement,
+    getAnnouncementInfo,
     getAnnouncementList,
     setReadAnnouncement,
     updateAnnouncement

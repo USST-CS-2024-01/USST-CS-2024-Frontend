@@ -27,6 +27,25 @@ export default function ScorePanel({ classId, groupId, taskId, disabled }) {
         return members;
     });
 
+    const { data: inGroupScore } = useSWR(`task-delivery-group-score-${classId}-${groupId}-${taskId}`, async () => {
+        const result = await task.getTaskMemberScore(classId, groupId, taskId)
+        const group_manager_score = result?.data?.group_manager_score || {}
+        const group_member_scores = result?.data?.group_member_scores || {}
+
+        const averageManagerScore = Object.values(group_manager_score).reduce((acc, score) => acc + score, 0) / Object.keys(group_manager_score).length
+        console.log("averageManagerScore", averageManagerScore)
+        const scoreList = {
+            member: {
+                ...group_member_scores,
+            },
+            manager: {
+                score: averageManagerScore,
+                detail: group_manager_score
+            }
+        }
+        return scoreList
+    })
+
     const [tmpMemberScore, setTmpMemberScore] = useState({})
 
     const updateScore = useDebounceFn(async (score, user_id) => {
@@ -51,6 +70,15 @@ export default function ScorePanel({ classId, groupId, taskId, disabled }) {
 
     return <div className="flex flex-col gap-4">
         {groupMembers?.map((member) => {
+            const isManager = member?.roles?.find((role) => role?.is_manager)
+            let managerScoreDetail = "";
+            for (const [key, value] of Object.entries(inGroupScore?.manager?.detail || {})) {
+                const user = groupMembers.find((member) => member?.user?.id == key)
+                managerScoreDetail += `${user?.user?.name}: ${value}`
+                if (key !== Object.keys(inGroupScore?.manager?.detail || {}).pop()) {
+                    managerScoreDetail += ", "
+                }
+            }
             return <div key={member.id} className="flex justify-between items-center">
                 <div className="flex-1 flex-row">
                     <div className="flex items-center gap-3 w-48">
@@ -58,7 +86,15 @@ export default function ScorePanel({ classId, groupId, taskId, disabled }) {
                         <Tooltip title={member?.roles?.map((role) => role?.role_name).join(', ')}>
                             <div className="flex flex-col">
                                 <span>
-                                    {member?.user?.name}
+                                    {member?.user?.name} (互评：
+                                    {isManager ? <Tooltip 
+                                        title={managerScoreDetail}
+                                        placement="right">
+                                        <span>{inGroupScore?.manager?.score || 0}</span>
+                                    </Tooltip> : <span>
+                                        {inGroupScore?.member[member?.user?.id] || 0}
+                                    </span>
+                                    })
                                 </span>
                                 <span>{member?.user?.employee_id}</span>
                             </div>

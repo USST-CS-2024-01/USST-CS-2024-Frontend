@@ -39,6 +39,8 @@ export default function GroupTaskDeliveryPage({ params }) {
         <div className="flex">
             <div>
                 {tasks?.task_chain?.map((task, index) => {
+                    const myTask = meMember?.roles?.find((role) => role?.id === task?.role?.id)
+
                     return <div
                         className={`mb-3 bg-white flex flex-col w-64 px-2 hover:shadow-md transition duration-300 ease-in-out cursor-pointer ${selectedTask?.id === task?.id ? 'border border-blue-500' : ''}`}
                         key={task?.id}
@@ -62,7 +64,10 @@ export default function GroupTaskDeliveryPage({ params }) {
                                     <Tooltip title="交付者">
                                         <UserOutlined />
                                     </Tooltip>
-                                    <span>{task?.role?.role_name || '未分配'}</span>
+                                    <span className={myTask ? 'text-red-500 font-bold' : ''}>
+                                        {task?.role?.role_name || '未分配'}
+                                        {myTask && ' (我负责的)'}
+                                    </span>
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <Tooltip title="截止时间">
@@ -80,6 +85,10 @@ export default function GroupTaskDeliveryPage({ params }) {
                         </div>
                     </div>
                 })}
+
+                {tasks?.task_chain?.length === 0 && <div className="text-gray-400 flex items-center justify-center h-40 w-64 bg-white rounded shadow-md">
+                    暂无任务，请等待老师发布
+                </div>}
             </div>
 
             <div className="bg-white p-5 rounded max-w-[800px] flex-grow ml-5">

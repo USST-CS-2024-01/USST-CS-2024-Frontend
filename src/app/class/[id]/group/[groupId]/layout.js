@@ -1,11 +1,12 @@
 "use client"
 
-import { Layout, Menu } from "antd";
+import { Button, Layout, Menu, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { user, group } from "@/api/index";
 import { useRouter } from 'next-nprogress-bar';
 import { getSelectedKeys, getOpenKeys, getMenuItems, getRedirectPath, hasAccess, GROUP_MENU } from "@/util/menu";
 import useSWR from "swr";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 
 const { Sider, Content } = Layout;
 const window = globalThis;
@@ -41,9 +42,9 @@ const RootLayout = ({ params, children }) => {
         if (me?.id === undefined) {
             return;
         }
-        setMenuItem(getMenuItems(me, GROUP_MENU, {id, groupId}));
-        setSelectedKeys(getSelectedKeys(route, GROUP_MENU,  {id, groupId}));
-        openKeys.push(...getOpenKeys(route, GROUP_MENU,  {id, groupId}));
+        setMenuItem(getMenuItems(me, GROUP_MENU, { id, groupId }));
+        setSelectedKeys(getSelectedKeys(route, GROUP_MENU, { id, groupId }));
+        openKeys.push(...getOpenKeys(route, GROUP_MENU, { id, groupId }));
         setOpenKeys(openKeys);
     }, [me, route, openKeys, id, groupId]);
 
@@ -71,6 +72,17 @@ const RootLayout = ({ params, children }) => {
             }} theme='light'>
                 <h2 className="text-left text-base font-bold pt-5 pb-1 px-7">
                     {groupInfo?.name}
+                    <Tooltip title="查看教程">
+                        <Button
+                            type="link"
+                            size="small"
+                            icon={<QuestionCircleOutlined />}
+                            onClick={() => {
+                                localStorage.removeItem(`scs:tour:group:init`);
+                                router.push(`/class/${id}/group/${groupId}`)
+                            }}
+                        />
+                    </Tooltip>
                 </h2>
                 <Menu
                     mode="inline"
@@ -84,7 +96,7 @@ const RootLayout = ({ params, children }) => {
                         marginTop: '10px'
                     }}
                     onClick={({ key }) => {
-                        router.push(getRedirectPath(me, GROUP_MENU, key, {id, groupId}));
+                        router.push(getRedirectPath(me, GROUP_MENU, key, { id, groupId }));
                     }}
                 />
             </Sider>

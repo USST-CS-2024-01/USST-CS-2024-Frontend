@@ -32,8 +32,8 @@ export async function getAnnouncementList(params, sort) {
     return data;
 }
 
-export async function getUnReadTotal() {
-    const data = await get(`/announcement/list?status=unread`);
+export async function getUnReadTotal(classId) {
+    const data = await get(`/announcement/list?status=unread&class_id=${classId}`);
     return data;
 }
 

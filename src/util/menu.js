@@ -22,7 +22,8 @@ import {
     FolderOpenTwoTone,
     PhoneTwoTone,
     NotificationOutlined,
-    BuildOutlined
+    BuildOutlined,
+    EditTwoTone
 } from '@ant-design/icons';
 
 export const CLASS_MENU = [
@@ -31,7 +32,7 @@ export const CLASS_MENU = [
         label: '看板',
         icon: <CarryOutOutlined />,
         href: '/class/{id}',
-        roles: ['teacher', 'admin']
+        roles: ['student']
     },
     {
         key: 'announcement',
@@ -70,12 +71,6 @@ export const CLASS_MENU = [
         ]
     },
     {
-        key: 'file',
-        label: '班级空间',
-        icon: <FolderOpenOutlined />,
-        href: '/class/{id}/file'
-    },
-    {
         key: 'team',
         label: '组队管理',
         icon: <TeamOutlined />,
@@ -90,20 +85,33 @@ export const CLASS_MENU = [
         ]
     },
     {
+        key: 'file',
+        label: '班级空间',
+        icon: <FolderOpenOutlined />,
+        href: '/class/{id}/file'
+    },
+    {
         key: 'score',
         label: '成绩管理',
         icon: <TrophyOutlined />,
         href: '/class/{id}/score'
+    },
+    {
+        key: 'setting',
+        label: '班级设置',
+        icon: <SettingOutlined />,
+        href: '/manage/class/edit/{id}',
+        roles: ['admin', 'teacher']
     }
 ];
 
 
 export const GROUP_MENU = [
     {
-        key: 'group_home',
-        label: '我的小组',
-        icon: <HomeTwoTone />,
-        href: '/class/{id}/group/{groupId}'
+        key: 'task',
+        label: '任务交付',
+        icon: <BookTwoTone />,
+        href: '/class/{id}/group/{groupId}/task'
     },
     {
         key: 'group_task',
@@ -118,26 +126,20 @@ export const GROUP_MENU = [
         href: '/class/{id}/group/{groupId}/group_meeting'
     },
     {
-        key: 'task',
-        label: '任务交付',
-        icon: <BookTwoTone />,
-        href: '/class/{id}/group/{groupId}/task'
-    },
-    {
         key: 'file',
         label: '小组空间',
         icon: <FolderOpenTwoTone />,
         href: '/class/{id}/group/{groupId}/file'
+    },
+    {
+        key: 'edit',
+        label: '编辑小组',
+        icon: <EditTwoTone />,
+        href: '/class/{id}/grouping/edit/{groupId}',
     }
 ];
 
 export const MANAGE_MENU = [
-    {
-        key: 'dashboard',
-        label: '仪表盘',
-        icon: <DashboardOutlined />,
-        href: '/manage'
-    },
     {
         key: 'class',
         label: '班级',

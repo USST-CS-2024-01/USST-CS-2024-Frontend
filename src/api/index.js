@@ -7,6 +7,7 @@ import * as clazz from './clazz';
 import * as task from './task';
 import * as group from './group';
 import * as repo_record from './repo_record';
+import * as score from './score'
 
 export {
     auth,
@@ -17,5 +18,6 @@ export {
     clazz,
     task,
     group,
-    repo_record
+    repo_record,
+    score
 }

@@ -117,3 +117,8 @@ export async function getScoreDetailOfTaskForGroupMember(classId, groupId, taskI
     const data = await get(`/class/${classId}/group/${groupId}/task/${taskId}/score`)
     return data;
 }
+
+export async function openNextTask(classId, groupId) {
+    const data = await post(`/class/${classId}/group/${groupId}/next_task`)
+    return data;
+}

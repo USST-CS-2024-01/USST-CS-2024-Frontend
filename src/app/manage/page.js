@@ -1,14 +1,20 @@
 "use client"
-import Image from 'next/image'
-import { Flex, Layout, Menu } from 'antd';
-import { useState } from 'react';
+
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
 
 export default function Home() {
-  const [collapsed, setCollapsed] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/manage/class/my_class');
+  })
 
   return (
-    <div>
-        Hello World
+    <div className='flex justify-center items-center h-screen gap-5 text-gray-500'>
+      <LoadingOutlined style={{ fontSize: 24 }} spin />
+      <span>正在载入...</span>
     </div>
   )
 }

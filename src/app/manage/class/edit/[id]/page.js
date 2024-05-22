@@ -1,5 +1,5 @@
 "use client"
-import { Alert, Breadcrumb, Tabs } from 'antd';
+import { Alert, Breadcrumb, Button, Tabs } from 'antd';
 import { useEffect, useState } from 'react';
 import { MANAGE_MENU, getBreadcrumbItems } from '@/util/menu';
 import { useRouter } from 'next-nprogress-bar';
@@ -29,7 +29,16 @@ export default function ClassEdit({ params }) {
 
     return <div className={"p-10"}>
         <Breadcrumb items={breadcrumb} />
-        <h1 className={"text-2xl font-bold mt-2"}>{title}</h1>
+        <div className='flex gap-2 items-end my-3'>
+            <h1 className={"text-2xl font-bold mt-2"}>{title}</h1>
+            {id !== 'new' && <Button
+                type='link'
+                onClick={() => router.push(`/class/${id}`)}
+                size='small'
+            >
+                查看班级
+            </Button>}
+        </div>
         {id == 1 &&
             <div className={"mt-5 mb-2"}>
                 <Alert
