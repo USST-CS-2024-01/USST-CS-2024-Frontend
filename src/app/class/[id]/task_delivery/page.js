@@ -13,6 +13,8 @@ import {
 import { timestampToTime } from '@/util/string';
 import { ProTable } from '@ant-design/pro-components';
 import TaskProgressList from './task_progress_list';
+import { message } from 'antd';
+import { doTaskRecordArchive } from '@/util/archive_download';
 
 export default function TaskDeliveryManage({ params }) {
     const [breadcrumb, setBreadcrumb] = useState([]);
@@ -22,6 +24,7 @@ export default function TaskDeliveryManage({ params }) {
         const data = await group.getClassGroupList(classId);
         return data?.data || []
     })
+    const [messageApi, contextHolder] = message.useMessage();
 
     const TASK_COLUMNS = [
         {
@@ -102,7 +105,40 @@ export default function TaskDeliveryManage({ params }) {
                             type="text"
                             key="editable"
                             onClick={() => {
-                                router.push(`/manage/class/edit/${record.id}`);
+                                console.log(classId, record.id)
+                                messageApi.open({
+                                    key: 'download_all',
+                                    type: 'loading',
+                                    content: '即将开始下载，请勿关闭页面',
+                                })
+                                doTaskRecordArchive(classId, record.id, ({ status, message, progress }) => {
+                                    if (status === 'error') {
+                                        messageApi.error({
+                                            key: 'download_all',
+                                            content: message
+                                        })
+                                    }
+
+                                    if (status === 'progress') {
+                                        messageApi.loading({
+                                            key: 'download_all',
+                                            content: `正在下载，请勿关闭页面：${message} (${progress}%)`
+                                        })
+                                    }
+                                }).then((url) => {
+                                    if (url) {
+                                        window.open(url)
+                                    }
+                                    messageApi.success({
+                                        key: 'download_all',
+                                        content: '下载完成'
+                                    })
+                                }).catch((e) => {
+                                    messageApi.error({
+                                        key: 'download_all',
+                                        content: e?.message || '下载失败'
+                                    })
+                                })
                             }}
                             icon={<DownloadOutlined />}
                         />
@@ -118,6 +154,7 @@ export default function TaskDeliveryManage({ params }) {
 
 
     return <div className={"p-10"}>
+        {contextHolder}
         <Breadcrumb items={breadcrumb} />
         <h1 className={"text-2xl font-bold mt-2"}>小组交付管理</h1>
 

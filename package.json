@@ -19,6 +19,7 @@
     "chart.js": "^4.4.2",
     "crypto-js": "^4.2.0",
     "js-export-excel": "^1.1.4",
+    "jszip": "^3.10.1",
     "next": "14.2.3",
     "next-nprogress-bar": "^2.3.11",
     "postcss": "8.4.38",

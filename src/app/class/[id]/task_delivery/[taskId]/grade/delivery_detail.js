@@ -23,6 +23,7 @@ import { ProForm, ProFormCheckbox, ProFormDigit, ProFormRadio, ProFormText, ProF
 import MeetingRecordTable from "@/components/meeting_record_table";
 import { comment } from "postcss";
 import AiEvaluationModal from "@/components/ai_evaluation_modal";
+import { doSingleRecordArchive } from "@/util/archive_download";
 
 
 function extractOriginalFileName(fileName) {
@@ -121,6 +122,40 @@ export default function DeliveryDetail({ classId, groupId, delivery, task, taskI
                         icon={<DownloadOutlined />}
                         onClick={() => {
                             // TODO 批量下载
+                            console.log(classId, groupId, taskId, delivery?.id)
+                            messageApi.open({
+                                key: 'download_all',
+                                type: 'loading',
+                                content: '即将开始下载，请勿关闭页面',
+                            })
+                            doSingleRecordArchive(classId, groupId, taskId, delivery?.id, ({ status, message, progress }) => {
+                                if (status === 'error') {
+                                    messageApi.error({
+                                        key: 'download_all',
+                                        content: message
+                                    })
+                                }
+
+                                if (status === 'progress') {
+                                    messageApi.loading({
+                                        key: 'download_all',
+                                        content: `正在下载，请勿关闭页面：${message} (${progress}%)`
+                                    })
+                                }
+                            }).then((url) => {
+                                if (url) {
+                                    window.open(url)
+                                }
+                                messageApi.success({
+                                    key: 'download_all',
+                                    content: '下载完成'
+                                })
+                            }).catch((e) => {
+                                messageApi.error({
+                                    key: 'download_all',
+                                    content: e?.message || '下载失败'
+                                })
+                            })
                         }}
                         type="dashed"
                     >
