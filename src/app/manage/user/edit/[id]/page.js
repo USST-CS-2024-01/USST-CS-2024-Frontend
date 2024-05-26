@@ -117,8 +117,8 @@ export default function UserEdit({ params }) {
                         name="username"
                         required
                         tooltip="用户名用于登录，不可重复"
-                        placeholder="用户名长度为4-20位，支持数字、字母和特殊字符"
-                        rules={[{ required: true }, { pattern: userRegex, message: '用户名长度为4-20位，支持数字、字母和特殊字符' }]}
+                        placeholder="用户名长度为4-20位，支持数字、字母"
+                        rules={[{ required: true }, { pattern: userRegex, message: '用户名长度为4-20位，支持数字、字母' }]}
                     />
                     <ProFormText
                         label="新密码"
