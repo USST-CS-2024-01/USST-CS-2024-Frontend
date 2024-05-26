@@ -10,6 +10,7 @@ import { message } from 'antd';
 import useSWR from 'swr';
 
 const passwordRegex = /^[a-zA-Z0-9~!@#$%^&*()_+`\-={}|\[\]\\:\";'<>?,./]{6,20}$/
+const userRegex = /^[a-zA-Z0-9_]{4,20}$/
 
 
 export default function UserEdit({ params }) {
@@ -57,6 +58,10 @@ export default function UserEdit({ params }) {
         }
         if (values?.password && !passwordRegex.test(values.password)) {
             messageApi.error('密码格式错误')
+            return
+        }
+        if (!userRegex.test(values.username)) {
+            messageApi.error('用户名格式错误')
             return
         }
 
@@ -112,8 +117,8 @@ export default function UserEdit({ params }) {
                         name="username"
                         required
                         tooltip="用户名用于登录，不可重复"
-                        placeholder="用户名长度为6-20位，支持数字、字母和特殊字符"
-                        rules={[{ required: true }]}
+                        placeholder="用户名长度为4-20位，支持数字、字母和特殊字符"
+                        rules={[{ required: true }, { pattern: userRegex, message: '用户名长度为4-20位，支持数字、字母和特殊字符' }]}
                     />
                     <ProFormText
                         label="新密码"
@@ -124,7 +129,7 @@ export default function UserEdit({ params }) {
                         required={id === 'new'}
                         tooltip={"密码长度为6-20位，支持数字、字母和特殊字符" + (id === 'new' ? '' : '，留空则不修改')}
                         placeholder="密码长度为6-20位，支持数字、字母和特殊字符"
-                        rules={id === 'new' ? [{ required: true }] : []}
+                        rules={id === 'new' ? [{ required: true }, { pattern: passwordRegex, message: '密码长度为6-20位，支持数字、字母和特殊字符' }] : []}
                     />
                     <ProFormText
                         label="确认密码"
@@ -134,7 +139,7 @@ export default function UserEdit({ params }) {
                         }}
                         required={id === 'new'}
                         placeholder="确认密码需要与新密码一致"
-                        rules={id === 'new' ? [{ required: true }] : []}
+                        rules={id === 'new' ? [{ required: true }, { pattern: passwordRegex, message: '密码长度为6-20位，支持数字、字母和特殊字符' }] : []}
                     />
                     <ProFormSelect
                         name="user_type"
